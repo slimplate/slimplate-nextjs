@@ -2,7 +2,8 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"],
-      "@slimplate/content": ["./src/content.js"],
+      "@slimplate/content": ["./slimplate/content.js"],
+      "@slimplate/utils": ["./slimplate/utils.js"]
     }
   }
 }

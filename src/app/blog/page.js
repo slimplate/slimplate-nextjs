@@ -1,21 +1,15 @@
+import BlogList from './BlogList.jsx'
 import Content from '@slimplate/content'
 
-export default async function PageBlog () {
+export default async function BlogLayout () {
   const content = new Content('blog')
-  const blogs = await Promise.all((await content.list()).map(f => content.get(f)))
-  console.log('blogs', blogs)
+  const items = await content.list(true)
+
   return (
     <main>
-      <div>
-        This is blog
-        <ul>
-          <li><a href='/blog/a'>a</a></li>
-          <li><a href='/blog/b'>b</a></li>
-          <li><a href='/blog/c'>c</a></li>
-          <li><a href='/blog/d'>d</a></li>
-          <li><a href='/blog/e'>e</a></li>
-          <li><a href='/blog/f'>f</a></li>
-        </ul>
+      <div className='prose'>
+        <h3>This is blog</h3>
+        <BlogList items={items} />
       </div>
     </main>
   )
