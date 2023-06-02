@@ -1,6 +1,6 @@
 import BlogDisplay from './BlogDisplay.jsx'
 import Content from '@slimplate/content'
-import { MDXRemote } from 'next-mdx-remote/rsc'
+import { serialize } from 'next-mdx-remote/serialize'
 
 export default async function PageSlug ({ params: { slug } }) {
   const content = new Content('blog')
@@ -16,9 +16,7 @@ export default async function PageSlug ({ params: { slug } }) {
   return (
     <div className='prose'>
       <div className=''>
-        <BlogDisplay title={blog.title} date={blog.date}>
-          <MDXRemote source={blog.children} />
-        </BlogDisplay>
+        <BlogDisplay {...blog} content={await serialize(blog.children)} />
       </div>
     </div>
   )
