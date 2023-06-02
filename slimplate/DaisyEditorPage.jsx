@@ -6,7 +6,7 @@ export default function DaisyEditorPage ({ item, children }) {
     <div className='drawer'>
       <input id='slimplate-drawer' type='checkbox' className='drawer-toggle' />
       <div className='drawer-content'>
-        <label htmlFor='slimplate-drawer' className='btn btn-primary drawer-button'>Edit Page</label>
+        <label htmlFor='slimplate-drawer' className='btn btn-primary drawer-button'>Edit</label>
         {children}
       </div>
       <div className='drawer-side'>
