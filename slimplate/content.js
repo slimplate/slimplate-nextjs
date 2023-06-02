@@ -4,6 +4,8 @@ import frontmatter from 'frontmatter'
 import { readFile } from 'fs/promises'
 import { tt } from '@slimplate/utils'
 
+const cache = {}
+
 export default class Content {
   constructor (collectionName, basePath = '.') {
     const { collections } = JSON.parse(readFileSync(basePath + '/.slimplate.json', 'utf8'))
@@ -24,8 +26,13 @@ export default class Content {
 
   // get a single article, keyed by filename
   async get (filename) {
+    if (cache[filename]) {
+      return cache[filename]
+    }
     const { data, content } = frontmatter(await readFile(this.basePath + filename, 'utf8'))
     data.url = tt(this.collection.url, { ...data, filename, content })
-    return { ...data, children: content }
+    data.filename = filename
+    cache[filename] = { ...data, children: content }
+    return cache[filename]
   }
 }
