@@ -3,6 +3,7 @@
   "collections": {
     "blog": {
         "title": "Blog",
+        "url": "/blog/${slug}",
         "files": "/content/blog/**/*.mdx",
         "filename": "/content/blog/${dateFormat(date)}-${slug}.mdx",
         "fields": [
