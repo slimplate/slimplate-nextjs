@@ -1,8 +1,10 @@
 import frontmatter from 'frontmatter'
+import { readFileSync } from 'fs'
 
 export default class Content {
-  constructor ({ files }, basePath = '.') {
-    this.files = files
+  constructor (collectionName, basePath = '.') {
+    const { collections } = JSON.parse(readFileSync(basePath + '/.slimplate.json', 'utf8'))
+    this.files = collections[collectionName].files
     this.basePath = basePath
   }
 
@@ -20,9 +22,7 @@ export default class Content {
   }
 }
 
-const content = new Content({
-  files: '/content/blog/**/*.mdx'
-})
+const content = new Content('blog')
 
 console.log(await content.list())
 console.log(await content.get('/content/blog/2023-03-08-first.mdx'))
