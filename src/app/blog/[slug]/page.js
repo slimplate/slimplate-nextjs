@@ -3,6 +3,17 @@ import { serialize } from 'next-mdx-remote/serialize'
 
 import BlogDisplay from './BlogDisplay.jsx'
 
+export async function generateMetadata ({ params: { slug } }) {
+  const content = new Content('blog')
+  const items = await content.list(true)
+  const blog = items.find(b => b.slug === slug)
+  if (blog) {
+    return {
+      title: `Blog - ${blog.title}`
+    }
+  }
+}
+
 export default async function PageSlug ({ params: { slug } }) {
   const content = new Content('blog')
   const items = await content.list(true)
