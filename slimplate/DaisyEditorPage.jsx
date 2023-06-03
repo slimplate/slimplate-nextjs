@@ -1,11 +1,17 @@
 // Client-side editor drawer
 
 // TODO: map title to correct title field from collection
-// TODO: check if logged in, and just return children if not
 
 import { IconPencil } from '@tabler/icons-react'
 
 export default function DaisyEditorPage ({ item, children }) {
+  // TODO: check if logged in
+  const loggedIn = true
+
+  if (!loggedIn) {
+    return children
+  }
+
   return (
     <div className='drawer drawer-end'>
       <input id='slimplate-drawer' type='checkbox' className='drawer-toggle' />
