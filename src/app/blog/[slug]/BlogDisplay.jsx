@@ -10,7 +10,7 @@ export default function BlogDisplay ({ content, ...frontmatter }) {
   const [source, setSource] = useSlimplateItem(content, frontmatter)
   return (
     <DaisyEditorPage item={frontmatter}>
-      <div className='prose'>
+      <div className='prose m-auto'>
         <h2>{frontmatter.title}</h2>
         <div className=''>
           <MDXRemote {...content} frontmatter={frontmatter} components={components} />
