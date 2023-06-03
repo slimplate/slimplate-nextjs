@@ -9,7 +9,7 @@ export default async function BlogLayout () {
     <main>
       <div className='prose'>
         <h3>This is blog</h3>
-        <BlogList items={items} />
+        <BlogList items={items} collectionName='blog' />
       </div>
     </main>
   )
