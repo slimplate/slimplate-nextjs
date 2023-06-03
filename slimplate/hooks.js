@@ -1,3 +1,5 @@
+// hooks for client-side content
+
 import { useState } from 'react'
 
 // this is dummy now, but later on client-side it will output server-side (from files) or git on client-side

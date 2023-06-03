@@ -1,3 +1,5 @@
+// Server-side manager of content
+
 import { glob } from 'glob'
 import { readFileSync } from 'fs'
 import frontmatter from 'frontmatter'
