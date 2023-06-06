@@ -14,8 +14,8 @@ export default class Content {
   constructor (collectionName, basePath = '.') {
     const { collections } = JSON.parse(readFileSync(basePath + '/.slimplate.json', 'utf8'))
     this.collection = collections[collectionName]
+    this.collection.name = collectionName
     this.basePath = basePath
-    this.collectionName = collectionName
   }
 
   // get all filenames that matches files pattern in def
@@ -37,7 +37,6 @@ export default class Content {
     data.url = tt(this.collection.url, { ...data, filename, content })
     data.filename = filename
     data.collection = this.collection
-    data.collectionName = this.collectionName
     cache[filename] = { ...data, children: content }
     return cache[filename]
   }

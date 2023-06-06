@@ -1,33 +1,40 @@
+import { useEffect, useState } from 'react'
 import dateFormat from 'dateformat'
+import { useSlimplate } from '@slimplate/hooks'
+
+const sorter = new Intl.Collator()
+
+// simple app util to put blog posts in order and format the date-field
+function fixDatesAndSort (posts) {
+  const out = posts.sort((a, b) => sorter.compare(a.date, b.date)).reverse()
+  return out.map(post => {
+    return { ...post, date: dateFormat(post.date, 'longDate') }
+  })
+}
 
 export default function ({ posts, collection }) {
+  const [blogPosts, setBlogPosts] = useState(posts)
+  const { getClientsideList } = useSlimplate(collection)
+
+  useEffect(() => {
+    getClientsideList().then(p => {
+      setBlogPosts(fixDatesAndSort(p))
+    })
+  }, [collection])
+
   return (
     <main className='prose m-auto'>
       BLOG LIST GOES HERE
-      <pre>{JSON.stringify(posts, null, 2)}</pre>
+      <pre>{JSON.stringify(blogPosts, null, 2)}</pre>
       collection:
       <pre>{JSON.stringify(collection, null, 2)}</pre>
     </main>
   )
 }
 
-const sorter = new Intl.Collator()
-
 export async function getServerSideProps () {
   const Content = (await import('@slimplate/content')).default
-
   const content = new Content('blog')
-  const props = { posts: [], collection: content.collection }
-
-  const posts = (await content.list(true)).sort((a, b) => sorter.compare(a.date, b.date)).reverse()
-
-  for (const post of await content.list(true)) {
-    props.posts.push({
-      title: post.title,
-      slug: post.slug,
-      date: dateFormat(post.date, 'longDate')
-    })
-  }
-
+  const props = { posts: fixDatesAndSort(await content.list(true)), collection: content.collection }
   return { props }
 }
