@@ -1,6 +1,6 @@
 import { useLocalStorage } from 'react-use'
 
-export default function ButtonLogin () {
+export default function ButtonLogin ({ backendURL }) {
   const [user, setUser, removeUser] = useLocalStorage('user', false)
 
   const onSubmit = e => {
