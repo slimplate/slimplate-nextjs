@@ -18,7 +18,9 @@ export default function ({ posts, collection }) {
 
   useEffect(() => {
     getClientsideList().then(p => {
-      setBlogPosts(fixDatesAndSort(p))
+      if (p) {
+        setBlogPosts(fixDatesAndSort(p))
+      }
     })
   }, [collection])
 

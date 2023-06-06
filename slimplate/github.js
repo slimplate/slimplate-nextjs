@@ -75,7 +75,7 @@ class Git {
 
   // get all files from collection
   async getAll () {
-    return (await this.glob(this.collection.files)) || []
+    return (await this.glob(this.collection.files))
   }
 }
 

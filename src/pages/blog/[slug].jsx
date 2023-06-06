@@ -21,9 +21,11 @@ export default function ({ post, collection, slug }) {
   // this pulls the client-side post
   useEffect(() => {
     getClientsideList().then(posts => {
-      const p = findPostBySlugAndFixDate(slug, posts)
-      if (p) {
-        setBlogPost(p)
+      if (posts) {
+        const p = findPostBySlugAndFixDate(slug, posts)
+        if (p) {
+          setBlogPost(p)
+        }
       }
     })
   }, [collection])
