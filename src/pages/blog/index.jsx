@@ -6,7 +6,8 @@ const sorter = new Intl.Collator()
 
 // simple app util to put blog posts in order and format the date-field
 function fixDatesAndSort (posts) {
-  const out = posts.sort((a, b) => sorter.compare(a.date, b.date)).reverse()
+  const out = posts.sort((a, b) => sorter.compare(a.date, b.date))
+  out.reverse()
   return out.map(post => {
     return { ...post, date: dateFormat(post.date, 'longDate') }
   })
@@ -26,6 +27,7 @@ export default function ({ posts, collection }) {
 
   return (
     <main className='prose m-auto'>
+      <h3>Blog</h3>
       <ul>
         {blogPosts.map(post => (
           <li key={post.slug}><a href={`/blog/${post.slug}`}>{post.title}</a> - <small>{post.date}</small></li>
