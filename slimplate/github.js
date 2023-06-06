@@ -40,9 +40,10 @@ class Git {
   async requireClone () {
     if (await this.requireAuth()) {
       // TODO: checkout repo here
+      // also get this.repo info from oktokit
 
       // if clone went ok
-      return true
+      return false
     }
     return false
   }

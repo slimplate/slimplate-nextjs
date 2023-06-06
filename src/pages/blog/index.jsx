@@ -16,7 +16,7 @@ function fixDatesAndSort (posts) {
 
 export default function ({ posts, collection }) {
   const [blogPosts, setBlogPosts] = useState(posts)
-  const { getClientsideList } = useSlimplate(collection, process.env.NEXT_CORS_PROXY)
+  const { getClientsideList } = useSlimplate(collection, process.env.NEXT_PUBLIC_CORS_PROXY)
 
   useEffect(() => {
     getClientsideList().then(p => {

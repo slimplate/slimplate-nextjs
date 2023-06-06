@@ -16,7 +16,7 @@ function findPostBySlugAndFixDate (slug, posts) {
 
 export default function ({ post, collection, slug }) {
   const [blogPost, setBlogPost] = useState(post)
-  const { getClientsideList } = useSlimplate(collection, process.env.NEXT_CORS_PROXY)
+  const { getClientsideList } = useSlimplate(collection, process.env.NEXT_PUBLIC_CORS_PROXY)
 
   // this pulls the client-side post
   useEffect(() => {

@@ -1,40 +1,33 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import { useLocalStorage } from 'react-use'
 import { Octokit } from '@octokit/rest'
 
-export default function ButtonLogin ({ backendURL }) {
+export default function ButtonLogin ({ backendURL, redirectURL, scope = 'repo read:org read:user user:email' }) {
   const [user, setUser, removeUser] = useLocalStorage('user', false)
-  const [token, setToken, removeToken] = useLocalStorage('token', false)
 
-  const handleLogin = async () => {
-    try {
-      const octokit = new Octokit({
-        auth: token
+  useEffect(() => {
+    const s = new URL(document.location)
+    const gh = s.searchParams.get('gh')
+
+    if (gh) {
+      const oktokit = new Octokit({ auth: gh })
+      oktokit.rest.users.getAuthenticated().then(({ data }) => {
+        setUser({ token: gh, ...data })
+        s.searchParams.delete('gh')
+        document.location.replace(s.toString())
       })
-
-      const result = await octokit.rest.users.getAuthenticated()
-
-      // set token in user
-      const newUser = result.data
-      newUser.token = token
-
-      console.log(result.data)
-      setUser(result.data)
-    } catch (err) {
-      console.error(err)
     }
+  }, [])
+
+  const onLoginClick = () => {
+    document.location.replace(`${backendURL}?scope=${encodeURIComponent(scope)}&redir=${encodeURIComponent(redirectURL || document.location.toString())}`)
   }
 
   return (
     <div>
       {user
-        ? (
-          <div>
-            <p>Welcome, {user.name}!</p>
-            <button onClick={() => setUser(null)}>Logout</button>
-          </div>
-          )
-        : (<button onClick={handleLogin}>Login with GitHub</button>)}
+        ? (<button className='btn' onClick={() => removeUser()}>Logout</button>)
+        : (<button className='btn' onClick={onLoginClick}>Login</button>)}
     </div>
   )
 }
