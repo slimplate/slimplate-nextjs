@@ -85,12 +85,12 @@ let git
 export function useSlimplate (collection, corsProxy = 'https://cors.isomorphic-git.org') {
   return {
     async getClientsideList () {
-      git = git || new Git(collection, corsProxy)
+      git ||= new Git(collection, corsProxy)
       return git.getAll()
     },
 
     async getClientsideItem (filename) {
-      git = git || new Git(collection, corsProxy)
+      git ||= new Git(collection, corsProxy)
 
       // TODO: get single item from git
 
