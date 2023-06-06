@@ -1,32 +1,32 @@
 {
   "name": "slimplate-nextjs2",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "next dev",
     "build": "next build"
   },
   "dependencies": {
-    "@isomorphic-git/lightning-fs": "^4.6.0",
-    "@tabler/icons-react": "^2.21.0",
-    "autoprefixer": "10.4.14",
-    "dateformat": "^5.0.3",
-    "frontmatter": "^0.0.3",
-    "glob": "^10.2.6",
-    "inflection": "^2.0.1",
-    "minimatch": "^9.0.1",
-    "next": "13.4.4",
-    "postcss": "8.4.24",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-use": "^17.4.0",
-    "short-uuid": "^4.2.2",
-    "slugify": "^1.6.6",
-    "tailwindcss": "3.3.2",
-    "template-templates": "^1.0.1"
+    "@isomorphic-git/lightning-fs": "latest",
+    "@tabler/icons-react": "latest",
+    "autoprefixer": "latest",
+    "dateformat": "latest",
+    "frontmatter": "latest",
+    "glob": "latest",
+    "inflection": "latest",
+    "minimatch": "latest",
+    "next": "latest",
+    "postcss": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-use": "latest",
+    "short-uuid": "latest",
+    "slugify": "latest",
+    "tailwindcss": "latest",
+    "template-templates": "latest"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.9",
-    "daisyui": "^3.0.3"
+    "@tailwindcss/typography": "latest",
+    "daisyui": "latest"
   }
 }

@@ -19,7 +19,7 @@ export default function ButtonLogin () {
 
   return (
     <>
-      <button className='btn' onClick={showModal}>Login</button>
+      <button className='btn' onClick={() => showModal()}>Login</button>
       <dialog id='modal_slimplate_login' className='modal'>
         <form method='dialog' className='modal-box' onSubmit={onSubmit}>
           <h3 className='font-bold text-lg'>Login</h3>
