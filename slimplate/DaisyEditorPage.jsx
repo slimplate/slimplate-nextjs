@@ -1,14 +1,12 @@
 // Client-side editor drawer
 
-// TODO: map title to correct title field from collection
-
 import { IconPencil } from '@tabler/icons-react'
+import { useLocalStorage } from 'react-use'
 
 export default function DaisyEditorPage ({ item, children }) {
-  // TODO: check if logged in
-  const loggedIn = true
+  const [user, setUser, removeUser] = useLocalStorage('user', false)
 
-  if (!loggedIn) {
+  if (!user) {
     return children
   }
 
