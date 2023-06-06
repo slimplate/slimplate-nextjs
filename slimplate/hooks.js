@@ -61,6 +61,9 @@ class Git {
     return existing
   }
 
+  // add/commit everything, then push/pull
+  syncToRemote () {}
+
   // get all the filenames that match a glob in local filesystem
   async glob (g) {
     if (await this.requireClone()) {
