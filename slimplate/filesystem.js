@@ -34,7 +34,6 @@ export default class Content {
     const { data, content } = frontmatter(await readFile(this.basePath + filename, 'utf8'))
     data.url = tt(this.collection.url, { ...data, filename, content })
     data.filename = filename
-    data.collection = this.collection
     cache[filename] = { ...data, children: content }
     return cache[filename]
   }
