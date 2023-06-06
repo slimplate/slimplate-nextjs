@@ -10,8 +10,8 @@ const cache = {}
 
 export default class Content {
   constructor (collectionName, basePath = '.') {
-    const { collections } = JSON.parse(readFileSync(basePath + '/.slimplate.json', 'utf8'))
-    this.collection = collections[collectionName]
+    const { collections, ...info } = JSON.parse(readFileSync(basePath + '/.slimplate.json', 'utf8'))
+    this.collection = { ...info, ...collections[collectionName] }
     this.collection.name = collectionName
     this.basePath = basePath
   }

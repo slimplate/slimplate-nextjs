@@ -1,5 +1,6 @@
 {
   "engine": "github",
+  "repo": "slimplate/slimplate-nextjs",
   "collections": {
     "blog": {
         "title": "Blog",
