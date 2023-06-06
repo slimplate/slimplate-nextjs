@@ -3,7 +3,7 @@ import LightningFS from '@isomorphic-git/lightning-fs'
 
 /*
 
-collection: full collection object from slimplate.json
+collection: full collection object from .slimplate.json
 user: full user-object, including token:
 
 {
@@ -12,6 +12,8 @@ user: full user-object, including token:
   login: "konsumer",
   email: "you@example.com"
 }
+
+You can get user with ButtonLogin
 
 */
 

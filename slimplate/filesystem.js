@@ -8,8 +8,6 @@ import { tt } from '@slimplate/utils'
 
 const cache = {}
 
-// TODO: add git stuff to constructor/list/get for client-side. Don't use effect/state
-
 export default class Content {
   constructor (collectionName, basePath = '.') {
     const { collections } = JSON.parse(readFileSync(basePath + '/.slimplate.json', 'utf8'))
