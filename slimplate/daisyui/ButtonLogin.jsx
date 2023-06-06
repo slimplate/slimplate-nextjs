@@ -4,7 +4,7 @@ export default function ButtonLogin () {
   const [user, setUser, removeUser] = useLocalStorage('user', false)
 
   const onSubmit = e => {
-    e.preventDefault()
+    // e.preventDefault()
     // user.token = whatever
     // setUser(user)
   }
