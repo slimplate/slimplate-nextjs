@@ -1,43 +1,98 @@
-// Server-side manager of content
+import minimatch from 'minimatch'
+import LightningFS from '@isomorphic-git/lightning-fs'
 
-import { glob } from 'glob'
-import { readFileSync } from 'fs'
-import frontmatter from 'frontmatter'
-import { readFile } from 'fs/promises'
-import { tt } from '@slimplate/utils'
+/*
 
-const cache = {}
+collection: full collection object from slimplate.json
+user: full user-object, including token:
 
-// TODO: add git stuff to constructor/list/get for client-side. Don't use effect/state
+{
+  token: "ksdjflskjdfsdf",
+  name: "Your Name",
+  login: "konsumer",
+  email: "you@example.com"
+}
 
-export default class Content {
-  constructor (collectionName, basePath = '.') {
-    const { collections } = JSON.parse(readFileSync(basePath + '/.slimplate.json', 'utf8'))
-    this.collection = collections[collectionName]
-    this.collection.name = collectionName
-    this.basePath = basePath
+*/
+
+class Git {
+  constructor (collection, corsProxy = 'https://cors.isomorphic-git.org') {
+    this.collection = collection
+    this.corsProxy = corsProxy
   }
 
-  // get all filenames that matches files pattern in def
-  async list (grabItems = false) {
-    const list = (await glob(this.basePath + this.collection.files)).map(f => '/' + f)
-    if (grabItems) {
-      return Promise.all(list.map(f => this.get(f)))
+  // ensure user is logged in, before doing things
+  async requireAuth () {
+    if (localStorage.user) {
+      this.user = JSON.parse(localStorage.user)
+      this.fs = new LightningFS(this.user.login)
+      this.pfs = this.fs.promises
+      return true
     } else {
-      return list
+      return false
     }
   }
 
-  // get a single article, keyed by filename
-  async get (filename) {
-    if (cache[filename]) {
-      return cache[filename]
+  // make sure the repo is checked out
+  async requireClone () {
+    if (await this.requireAuth()) {
+      // TODO: checkout repo here
+
+      // if clone went ok
+      return true
     }
-    const { data, content } = frontmatter(await readFile(this.basePath + filename, 'utf8'))
-    data.url = tt(this.collection.url, { ...data, filename, content })
-    data.filename = filename
-    data.collection = this.collection
-    cache[filename] = { ...data, children: content }
-    return cache[filename]
+    return false
+  }
+
+  // get a list of all files in local filesystem
+  async allFiles (rootDir = `/${this.repo.full_name}`, existing = []) {
+    for (const file of await this.pfs.readdir(rootDir)) {
+      if (file === '.git') {
+        continue
+      }
+      const filename = `${rootDir}/${file}`
+      const s = await this.pfs.lstat(filename)
+      if (s.type === 'dir') {
+        await this.allFiles(filename, existing)
+      } else {
+        existing.push(filename)
+      }
+    }
+    return existing
+  }
+
+  // add/commit everything, then push/pull
+  syncToRemote () {}
+
+  // get all the filenames that match a glob in local filesystem
+  async glob (g) {
+    if (await this.requireClone()) {
+      return (await this.allFiles()).filter(f => minimatch(f, `/${this.repo.full_name}${g}`)).map(f => f.replace(`/${this.repo.full_name}`, ''))
+    }
+  }
+
+  // get all files from collection
+  async getAll () {
+    return (await this.glob(this.collection.files)) || []
+  }
+}
+
+// cached copy of git
+let git
+
+export function useSlimplate (collection, corsProxy = 'https://cors.isomorphic-git.org') {
+  return {
+    async getClientsideList () {
+      git = git || new Git(collection, corsProxy)
+      return git.getAll()
+    },
+
+    async getClientsideItem (filename) {
+      git = git || new Git(collection, corsProxy)
+
+      // TODO: get single item from git
+
+      return null
+    }
   }
 }

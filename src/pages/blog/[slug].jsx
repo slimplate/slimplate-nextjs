@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import dateFormat from 'dateformat'
 import { EditorPage } from '@slimplate/daisyui'
-import { useSlimplate } from '@slimplate/hooks'
+import { useSlimplate } from '@slimplate/github'
 
 // simple app util to find a post by slug, then format date
 function findPostBySlugAndFixDate (slug, posts) {
@@ -18,6 +18,7 @@ export default function ({ post, collection, slug }) {
   const [blogPost, setBlogPost] = useState(post)
   const { getClientsideList } = useSlimplate(collection)
 
+  // this pulls the client-side post
   useEffect(() => {
     getClientsideList().then(posts => {
       const p = findPostBySlugAndFixDate(slug, posts)
@@ -39,7 +40,8 @@ export default function ({ post, collection, slug }) {
 }
 
 export async function getServerSideProps ({ query: { slug } }) {
-  const Content = (await import('@slimplate/github')).default
+  // this pulls the server-side post
+  const Content = (await import('@slimplate/filesystem')).default
   const content = new Content('blog')
   const props = { slug, collection: content.collection, post: findPostBySlugAndFixDate(slug, await content.list(true)) }
   return { props }

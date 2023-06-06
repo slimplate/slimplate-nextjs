@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import dateFormat from 'dateformat'
-import { useSlimplate } from '@slimplate/hooks'
+import { useSlimplate } from '@slimplate/github'
 
 const sorter = new Intl.Collator()
 
@@ -33,7 +33,7 @@ export default function ({ posts, collection }) {
 }
 
 export async function getServerSideProps () {
-  const Content = (await import('@slimplate/github')).default
+  const Content = (await import('@slimplate/filesystem')).default
   const content = new Content('blog')
   const props = { posts: fixDatesAndSort(await content.list(true)), collection: content.collection }
   return { props }
