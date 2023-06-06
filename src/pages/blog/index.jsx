@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import dateFormat from 'dateformat'
 import { useSlimplate } from '@slimplate/github'
 
@@ -30,7 +31,7 @@ export default function ({ posts, collection }) {
       <h3>Blog</h3>
       <ul>
         {blogPosts.map(post => (
-          <li key={post.slug}><a href={`/blog/${post.slug}`}>{post.title}</a> - <small>{post.date}</small></li>
+          <li key={post.slug}><Link href={`/blog/${post.slug}`}>{post.title}</Link> - <small>{post.date}</small></li>
         ))}
       </ul>
     </main>
