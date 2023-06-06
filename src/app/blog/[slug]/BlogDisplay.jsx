@@ -7,7 +7,6 @@ import DaisyEditorPage from '@slimplate/DaisyEditorPage'
 const components = {}
 
 export default function BlogDisplay ({ content, ...frontmatter }) {
-  const [source, setSource] = useSlimplateItem(content, frontmatter)
   return (
     <DaisyEditorPage item={frontmatter}>
       <div className='prose m-auto'>
