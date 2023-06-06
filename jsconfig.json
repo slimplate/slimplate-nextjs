@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"],
-      "@slimplate/content": ["./slimplate/content.js"],
-      "@slimplate/utils": ["./slimplate/utils.js"],
-      "@slimplate/hooks": ["./slimplate/hooks.js"],
-      "@slimplate/DaisyEditorPage": ["./slimplate/DaisyEditorPage.jsx"]
+      "@/*": ["./src/*"]
     }
   }
 }
