@@ -3,7 +3,7 @@
 import { IconPencil } from '@tabler/icons-react'
 import { useLocalStorage } from 'react-use'
 
-export default function DaisyEditorPage ({ item, children }) {
+export default function EditorPage ({ item, children }) {
   const [user, setUser, removeUser] = useLocalStorage('user', false)
 
   if (!user) {
