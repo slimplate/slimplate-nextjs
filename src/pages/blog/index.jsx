@@ -26,10 +26,11 @@ export default function ({ posts, collection }) {
 
   return (
     <main className='prose m-auto'>
-      BLOG LIST GOES HERE
-      <pre>{JSON.stringify(blogPosts, null, 2)}</pre>
-      collection:
-      <pre>{JSON.stringify(collection, null, 2)}</pre>
+      <ul>
+        {blogPosts.map(post => (
+          <li key={post.slug}><a href={`/blog/${post.slug}`}>{post.title}</a> - <small>{post.date}</small></li>
+        ))}
+      </ul>
     </main>
   )
 }
