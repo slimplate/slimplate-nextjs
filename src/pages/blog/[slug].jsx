@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import dateFormat from 'dateformat'
-import DaisyEditorPage from '@slimplate/DaisyEditorPage'
+import { EditorPage } from '@slimplate/daisyui'
 import { useSlimplate } from '@slimplate/hooks'
 
 // simple app util to find a post by slug, then format date
@@ -28,18 +28,18 @@ export default function ({ post, collection, slug }) {
   }, [collection])
 
   return (
-    <DaisyEditorPage item={blogPost}>
+    <EditorPage item={blogPost}>
       <main className='prose m-auto'>
         <pre>{JSON.stringify(blogPost, null, 2)}</pre>
         collection:
         <pre>{JSON.stringify(collection, null, 2)}</pre>
       </main>
-    </DaisyEditorPage>
+    </EditorPage>
   )
 }
 
 export async function getServerSideProps ({ query: { slug } }) {
-  const Content = (await import('@slimplate/content')).default
+  const Content = (await import('@slimplate/github')).default
   const content = new Content('blog')
   const props = { slug, collection: content.collection, post: findPostBySlugAndFixDate(slug, await content.list(true)) }
   return { props }

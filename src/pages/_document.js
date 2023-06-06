@@ -1,12 +1,12 @@
 import { Html, Head, Main, NextScript } from 'next/document'
-import DaisyButtonLogin from '@slimplate/DaisyButtonLogin'
+import { ButtonLogin } from '@slimplate/daisyui'
 
 export default function Document () {
   return (
     <Html lang='en'>
       <Head />
       <body>
-        <DaisyButtonLogin />
+        <ButtonLogin />
         <Main />
         <NextScript />
       </body>

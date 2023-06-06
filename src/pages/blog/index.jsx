@@ -33,7 +33,7 @@ export default function ({ posts, collection }) {
 }
 
 export async function getServerSideProps () {
-  const Content = (await import('@slimplate/content')).default
+  const Content = (await import('@slimplate/github')).default
   const content = new Content('blog')
   const props = { posts: fixDatesAndSort(await content.list(true)), collection: content.collection }
   return { props }
