@@ -1,12 +1,16 @@
 import dateFormat from 'dateformat'
+import DaisyEditorPage from '@slimplate/DaisyEditorPage'
 
 export default function ({ post, collection }) {
   return (
-    <main className='prose m-auto'>
-      <pre>{JSON.stringify(post, null, 2)}</pre>
-      collection:
-      <pre>{JSON.stringify(collection, null, 2)}</pre>
-    </main>
+    <DaisyEditorPage item={post}>
+      <main className='prose m-auto'>
+        <pre>{JSON.stringify(post, null, 2)}</pre>
+        collection:
+        <pre>{JSON.stringify(collection, null, 2)}</pre>
+      </main>
+    </DaisyEditorPage>
+
   )
 }
 
