@@ -1,35 +1,40 @@
+import React from 'react'
 import { useLocalStorage } from 'react-use'
+import { Octokit } from '@octokit/rest'
 
 export default function ButtonLogin ({ backendURL }) {
   const [user, setUser, removeUser] = useLocalStorage('user', false)
+  const [token, setToken, removeToken] = useLocalStorage('token', false)
 
-  const onSubmit = e => {
-    // e.preventDefault()
-    // user.token = whatever
-    // setUser(user)
-  }
+  const handleLogin = async () => {
+    try {
+      const octokit = new Octokit({
+        auth: token
+      })
 
-  if (user) {
-    return <div>LOGOUT</div>
-  }
+      const result = await octokit.rest.users.getAuthenticated()
 
-  const showModal = e => {
-    window.modal_slimplate_login.showModal()
+      // set token in user
+      const newUser = result.data
+      newUser.token = token
+
+      console.log(result.data)
+      setUser(result.data)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   return (
-    <>
-      <button className='btn' onClick={() => showModal()}>Login</button>
-      <dialog id='modal_slimplate_login' className='modal'>
-        <form method='dialog' className='modal-box' onSubmit={onSubmit}>
-          <h3 className='font-bold text-lg'>Login</h3>
-          <p className='py-4'>Put login here.</p>
-          <div className='modal-action'>
-            {/* if there is a button in form, it will close the modal */}
-            <button className='btn'>Close</button>
+    <div>
+      {user
+        ? (
+          <div>
+            <p>Welcome, {user.name}!</p>
+            <button onClick={() => setUser(null)}>Logout</button>
           </div>
-        </form>
-      </dialog>
-    </>
+          )
+        : (<button onClick={handleLogin}>Login with GitHub</button>)}
+    </div>
   )
 }
