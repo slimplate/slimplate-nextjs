@@ -13,7 +13,7 @@ const widgetMap = {
   default: (value) => <input className={cx(inputClass)} type='text' defaultValue={value} />
 }
 
-export default function EditorPage ({ item, git, children }) {
+export default function EditorPage ({ item, collection, children }) {
   const [user] = useLocalStorage('user', false)
 
   if (!user) {
@@ -30,8 +30,8 @@ export default function EditorPage ({ item, git, children }) {
       <div className='drawer-side'>
         <label htmlFor='slimplate-drawer' className='drawer-overlay' />
         <div className='menu h-full bg-base-200 text-base-content flex flex-col gap-4'>
-          {Object.keys(git.collection.fields).map((name) => {
-            const field = git.collection.fields[name]
+          {Object.keys(collection.fields).map((name) => {
+            const field = collection.fields[name]
             const value = item[name]
 
             const inputElement = (widgetMap[field.type] || widgetMap.default)(value)

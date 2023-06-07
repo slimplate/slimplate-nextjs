@@ -16,12 +16,16 @@ function sortPosts (posts) {
 
 export default function ({ posts, collection }) {
   const [blogPosts, setBlogPosts] = useState(posts)
-  const git = new Git(collection, repo, process.env.NEXT_PUBLIC_CORS_PROXY)
 
+  // this pulls the client-side list of posts
   useEffect(() => {
-    git.getAll().then(p => {
-      if (p) {
-        setBlogPosts(sortPosts(p))
+    const git = new Git(collection, repo, process.env.NEXT_PUBLIC_CORS_PROXY)
+    git.init().then(async () => {
+      if (git.updated) {
+        const posts = await git.getAll()
+        if (posts) {
+          setBlogPosts(sortPosts(posts))
+        }
       }
     })
   }, [collection])

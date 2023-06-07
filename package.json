@@ -9,16 +9,16 @@
   },
   "dependencies": {
     "@isomorphic-git/lightning-fs": "latest",
-    "@octokit/rest": "^19.0.11",
+    "@octokit/rest": "latest",
     "@tabler/icons-react": "latest",
     "autoprefixer": "latest",
-    "classnames": "^2.3.2",
+    "classnames": "latest",
     "dateformat": "latest",
     "frontmatter": "latest",
     "glob": "latest",
     "inflection": "latest",
-    "isomorphic-git": "^1.24.0",
-    "match-url-wildcard": "^0.0.4",
+    "isomorphic-git": "latest",
+    "match-url-wildcard": "latest",
     "minimatch": "latest",
     "next": "latest",
     "postcss": "latest",
@@ -32,6 +32,6 @@
   "devDependencies": {
     "@tailwindcss/typography": "latest",
     "daisyui": "latest",
-    "vercel": "^30.2.0"
+    "vercel": "latest"
   }
 }

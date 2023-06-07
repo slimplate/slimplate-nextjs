@@ -16,22 +16,25 @@ function findPostBySlug (slug, posts) {
 
 export default function ({ post, collection, slug }) {
   const [blogPost, setBlogPost] = useState(post)
-  const git = new Git(collection, repo, process.env.NEXT_PUBLIC_CORS_PROXY)
 
   // this pulls the client-side post
   useEffect(() => {
-    git.getAll().then(posts => {
-      if (posts) {
-        const p = findPostBySlug(slug, posts)
-        if (p) {
-          setBlogPost(p)
+    const git = new Git(collection, repo, process.env.NEXT_PUBLIC_CORS_PROXY)
+    git.init().then(async () => {
+      if (git.updated) {
+        const posts = await git.getAll()
+        if (posts) {
+          const p = findPostBySlug(slug, posts)
+          if (p) {
+            setBlogPost(p)
+          }
         }
       }
     })
   }, [collection])
 
   return (
-    <EditorPage item={blogPost} git={git}>
+    <EditorPage item={blogPost} collection={collection}>
       <main className='prose m-auto'>
         server-side version:
         <pre>{JSON.stringify(blogPost, null, 2)}</pre>
