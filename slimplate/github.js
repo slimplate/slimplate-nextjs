@@ -20,14 +20,12 @@ You can get user with ButtonLogin
 */
 
 class Git {
-  constructor (collection, corsProxy = 'https://cors.isomorphic-git.org') {
+  constructor (collection, repo, corsProxy = 'https://cors.isomorphic-git.org') {
     this.collection = collection
     this.corsProxy = corsProxy
-
-    // TODO: Remove this is temp (need to get repo)
     this.repo = {
-      full_name: 'slimplate/private-tester',
-      url: 'https://github.com/slimplate/private-tester.git'
+      full_name: repo,
+      url: `https://github.com/${repo}.git`
     }
   }
 
@@ -124,17 +122,18 @@ class Git {
 // cached copy of git
 let gitCache
 
-export function useSlimplate (collection, corsProxy = 'https://cors.isomorphic-git.org') {
+export function useSlimplate (collection, repo, corsProxy = 'https://cors.isomorphic-git.org') {
   return {
+    repo,
     collection,
 
     async getClientsideList () {
-      gitCache ||= new Git(collection, corsProxy)
+      gitCache ||= new Git(collection, repo, corsProxy)
       return gitCache.getAll()
     },
 
     async getClientsideItem (filename) {
-      gitCache ||= new Git(collection, corsProxy)
+      gitCache ||= new Git(collection, repo, corsProxy)
 
       // TODO: get single item from git
 

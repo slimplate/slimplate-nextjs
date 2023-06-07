@@ -5,7 +5,6 @@ import matchUrl from 'match-url-wildcard'
 function validRedir (redirectUrlString, url) {
   const allUrls = redirectUrlString.split(',').map(s => s.trim()).filter(u => u)
   const matchedURLS = allUrls.find(s => matchUrl(url, s))
-  console.log({ allUrls, matchedURLS })
   return !!matchedURLS
 }
 
@@ -52,4 +51,52 @@ export async function ghcallback (req, res, redirectUrlString, githubClient, git
     }
   }
   return res.status(500).json({ error: true, message: 'Code & req must be provided.' })
+}
+
+// do CORS proxy for git
+export async function cors (url, req, res) {
+  if (!url) {
+    return res.status(500).json({ error: true, message: 'No URL param' })
+  }
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,POST,OPTIONS')
+  res.setHeader('Access-Control-Max-Age', '86400')
+
+  const requestHeaders = new Headers(req.headers)
+
+  if (
+    requestHeaders.get('Origin') !== null &&
+    requestHeaders.get('Access-Control-Request-Method') !== null &&
+    requestHeaders.get('Access-Control-Request-Headers') !== null
+  ) {
+    res.setHeader('Access-Control-Allow-Headers', requestHeaders.get('Access-Control-Request-Headers'))
+    return res.send(null)
+  }
+
+  // const apiURL = new URL(url.toString().replace(/^.+\/api\/cors/, 'https:/'))
+
+  console.log('https://' + url)
+
+  res.send('OK')
+
+//   const apiUrl = new URL(req.url.toString().replace(/^.+\/api\/cors/, 'https:/'))
+//   const request = new Request(apiUrl, req)
+//   if (!req.headers.get('user-agent') || !req.headers.get('user-agent').startsWith('git/')) {
+//     request.headers.set('user-agent', 'git/@isomorphic-git/cors-proxy')
+//   }
+//   request.headers.set('Origin', apiUrl.origin)
+//   request.headers.set('Referer', apiUrl.toString())
+//   request.headers.set('Host', apiUrl.hostname)
+//   let response = await fetch(request)
+//
+//   response = new Response(response.body, response)
+//   if (response.headers.has('Location')) {
+//     const newUrl = response.headers.get('Location').replace(/^https?:\//, '/api/cors')
+//     response.headers.set('Location', newUrl)
+//   }
+//
+//   response.headers.set('Access-Control-Allow-Origin', '*')
+//   response.headers.append('Vary', 'Origin')
+//
+//   return response
 }
