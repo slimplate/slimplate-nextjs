@@ -3,6 +3,7 @@ import Link from 'next/link'
 import dateFormat from 'dateformat'
 import Git from '@slimplate/github'
 import s from '@/../.slimplate.json'
+import { EditorPage } from '@slimplate/daisyui'
 const { collections, repo } = s
 
 const sorter = new Intl.Collator()
@@ -31,14 +32,16 @@ export default function ({ posts, collection }) {
   }, [collection])
 
   return (
-    <main className='prose m-auto'>
-      <h3>Blog</h3>
-      <ul>
-        {blogPosts.map(post => (
-          <li key={post.slug}><Link href={`/blog/${post.slug}`}>{post.title}</Link> - <small>{dateFormat(post.date, 'longDate')}</small></li>
-        ))}
-      </ul>
-    </main>
+    <EditorPage collection={collection}>
+      <main className='prose m-auto'>
+        <h3>Blog</h3>
+        <ul>
+          {blogPosts.map(post => (
+            <li key={post.slug}><Link href={`/blog/${post.slug}`}>{post.title}</Link> - <small>{dateFormat(post.date, 'longDate')}</small></li>
+          ))}
+        </ul>
+      </main>
+    </EditorPage>
   )
 }
 
