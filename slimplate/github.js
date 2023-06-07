@@ -28,9 +28,13 @@ class Git {
   async requireAuth () {
     if (localStorage.user) {
       this.user = JSON.parse(localStorage.user)
-      this.fs = new LightningFS(this.user.login)
-      this.pfs = this.fs.promises
-      return true
+      if (this.user) {
+        this.fs = new LightningFS(this.user.login)
+        this.pfs = this.fs.promises
+        return true
+      } else {
+        return false
+      }
     } else {
       return false
     }
