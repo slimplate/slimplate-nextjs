@@ -9,10 +9,8 @@ import { tt } from '@slimplate/utils'
 const cache = {}
 
 export default class Content {
-  constructor (collectionName, basePath = '.') {
-    const { collections, ...info } = JSON.parse(readFileSync(basePath + '/.slimplate.json', 'utf8'))
-    this.collection = { ...info, ...collections[collectionName] }
-    this.collection.name = collectionName
+  constructor (collection, basePath = '.') {
+    this.collection = collection
     this.basePath = basePath
   }
 

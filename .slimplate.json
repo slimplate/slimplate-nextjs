@@ -1,46 +1,43 @@
-{
-  "engine": "github",
-  "repo": "slimplate/slimplate-nextjs",
-  "collections": {
-    "blog": {
-        "title": "Blog",
-        "url": "/blog/${slug}",
-        "files": "/content/blog/**/*.mdx",
-        "filename": "/content/blog/${dateFormat(date)}-${slug}.mdx",
-        "fields": [
-          {
-            "name": "title",
-            "label": "Title",
-            "validators": [
-              "required"
-            ]
-          },      
-          {
-            "name": "slug",
-            "label": "URL Slug",
-            "defaultValue": "${slugify(title)}",
-            "validators": [
-              "required"
-            ]
-          },
-          {
-            "name": "children",
-            "label": "Body",
-            "type": "richtext",
-            "validators": [
-              "required"
-            ]
-          },
-          {
-            "name": "date",
-            "label": "Date",
-            "type": "date",
-            "defaultValue": "${dateFormat()}",
-            "validators": [
-              "required"
-            ]
-          }
+{ "blog": {
+    "title": "Blog",
+    "url": "/blog/${slug}",
+    "files": "/content/blog/**/*.mdx",
+    "filename": "/content/blog/${dateFormat(date)}-${slug}.mdx",
+    "engine": "github",
+    "repo": "slimplate/slimplate-nextjs",
+    "fields": [
+      {
+        "name": "title",
+        "label": "Title",
+        "validators": [
+          "required"
+        ]
+      },      
+      {
+        "name": "slug",
+        "label": "URL Slug",
+        "defaultValue": "${slugify(title)}",
+        "validators": [
+          "required"
+        ]
+      },
+      {
+        "name": "children",
+        "label": "Body",
+        "type": "richtext",
+        "validators": [
+          "required"
+        ]
+      },
+      {
+        "name": "date",
+        "label": "Date",
+        "type": "date",
+        "defaultValue": "${dateFormat()}",
+        "validators": [
+          "required"
         ]
       }
-    }
+    ]
   }
+}
