@@ -4,7 +4,7 @@ import { IconPencil } from '@tabler/icons-react'
 import { useLocalStorage } from '@slimplate/utils'
 
 export default function EditorPage ({ item, children }) {
-  const [user, setUser] = useLocalStorage('user', false)
+  const [user] = useLocalStorage('user', false)
 
   if (!user) {
     return children
