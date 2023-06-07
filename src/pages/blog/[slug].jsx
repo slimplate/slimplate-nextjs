@@ -19,7 +19,7 @@ export default function ({ post, collection, slug }) {
 
   // this pulls the client-side post
   useEffect(() => {
-    const git = new Git(collection, repo, process.env.NEXT_PUBLIC_CORS_PROXY)
+    const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: 'main' })
     git.init().then(async () => {
       if (git.updated) {
         const posts = await git.getAll()
