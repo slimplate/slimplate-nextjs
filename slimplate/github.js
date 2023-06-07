@@ -55,33 +55,33 @@ class Git {
   // make sure the repo is checked out
   async requireClone (opts) {
     if (await this.requireAuth()) {
+      try {
       // TODO: checkout repo here
       // also get this.repo info from oktokit
-      const o = {
-        fs: this.fs,
-        http,
-        dir: `/${this.repo.full_name}`,
-        corsProxy: this.corsProxy,
-        url: this.getAuthUrl(),
-        ref: 'main',
-        singleBranch: true,
-        depth: 1,
-        author: {
-          name: this.user.name,
-          email: this.user.email || this.user.login
-        },
-        ...opts
-      }
+        const o = {
+          fs: this.fs,
+          http,
+          dir: `/${this.repo.full_name}`,
+          corsProxy: this.corsProxy,
+          url: this.getAuthUrl(),
+          ref: 'main',
+          singleBranch: true,
+          depth: 1,
+          author: {
+            name: this.user.name,
+            email: this.user.email || this.user.login
+          },
+          ...opts
+        }
 
-      console.log('Clone options: ', o)
+        console.log('Clone options: ', o)
 
-      const c = await git.clone(o)
-      console.log('clone', c)
-      if (c) {
+        const c = await git.clone(o)
         return true
+      } catch (e) {
+        console.error(e)
+        return false
       }
-      // if clone went ok
-      return false
     }
     return false
   }

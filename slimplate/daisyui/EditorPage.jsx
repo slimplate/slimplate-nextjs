@@ -36,7 +36,6 @@ export default function EditorPage ({ item, slimplate, children }) {
       <div className='drawer-side'>
         <label htmlFor='slimplate-drawer' className='drawer-overlay' />
         <div className='menu h-full bg-base-200 text-base-content flex flex-col gap-4'>
-
           {sortedFields.map((field) => {
             let value = item[field.name]
 
