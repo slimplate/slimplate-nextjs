@@ -5,7 +5,7 @@
   "scripts": {
     "start": "next dev",
     "build": "next build",
-    "deploy": "npx -y vercel@latest"
+    "deploy": "npx -y vercel@latest -- --prod"
   },
   "dependencies": {
     "@isomorphic-git/lightning-fs": "latest",
