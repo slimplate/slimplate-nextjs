@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import dateFormat from 'dateformat'
 import Git from '@slimplate/github'
-import { repo, collections } from '@/../.slimplate.json'
+import s from '@/../.slimplate.json'
+const { collections, repo } = s
 
 const sorter = new Intl.Collator()
 

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { EditorPage } from '@slimplate/daisyui'
 import Git from '@slimplate/github'
-import { collections, repo } from '@/../.slimplate.json'
+import s from '@/../.slimplate.json'
+const { collections, repo } = s
 
 // simple app util to find a post by slug, then format date
 function findPostBySlug (slug, posts) {
