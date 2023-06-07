@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
-import dateFormat from 'dateformat'
 import { EditorPage } from '@slimplate/daisyui'
 import Git from '@slimplate/github'
 import { collections, repo } from '@/../.slimplate.json'
 
 // simple app util to find a post by slug, then format date
-function findPostBySlugAndFixDate (slug, posts) {
+function findPostBySlug (slug, posts) {
   for (const post of posts) {
     if (post.slug === slug) {
-      post.date = dateFormat(post.date, 'longDate')
       return post
     }
   }
@@ -23,7 +21,7 @@ export default function ({ post, collection, slug }) {
   useEffect(() => {
     git.getAll().then(posts => {
       if (posts) {
-        const p = findPostBySlugAndFixDate(slug, posts)
+        const p = findPostBySlug(slug, posts)
         if (p) {
           setBlogPost(p)
         }
@@ -56,6 +54,6 @@ export async function getStaticPaths () {
 export async function getStaticProps ({ params: { slug } }) {
   const Content = (await import('@slimplate/filesystem')).default
   const content = new Content(collections.blog)
-  const props = { slug, collection: collections.blog, post: findPostBySlugAndFixDate(slug, await content.list(true)) }
+  const props = { slug, collection: collections.blog, post: findPostBySlug(slug, await content.list(true)) }
   return { props }
 }

@@ -7,12 +7,10 @@ import { repo, collections } from '@/../.slimplate.json'
 const sorter = new Intl.Collator()
 
 // simple app util to put blog posts in order and format the date-field
-function fixDatesAndSort (posts) {
+function sortPosts (posts) {
   const out = posts.sort((a, b) => sorter.compare(a.date, b.date))
   out.reverse()
-  return out.map(post => {
-    return { ...post, date: dateFormat(post.date, 'longDate') }
-  })
+  return out
 }
 
 export default function ({ posts, collection }) {
@@ -22,7 +20,7 @@ export default function ({ posts, collection }) {
   useEffect(() => {
     git.getAll().then(p => {
       if (p) {
-        setBlogPosts(fixDatesAndSort(p))
+        setBlogPosts(sortPosts(p))
       }
     })
   }, [collection])
@@ -32,7 +30,7 @@ export default function ({ posts, collection }) {
       <h3>Blog</h3>
       <ul>
         {blogPosts.map(post => (
-          <li key={post.slug}><Link href={`/blog/${post.slug}`}>{post.title}</Link> - <small>{post.date}</small></li>
+          <li key={post.slug}><Link href={`/blog/${post.slug}`}>{post.title}</Link> - <small>{dateFormat(post.date, 'longDate')}</small></li>
         ))}
       </ul>
     </main>
@@ -42,6 +40,6 @@ export default function ({ posts, collection }) {
 export async function getStaticProps () {
   const Content = (await import('@slimplate/filesystem')).default
   const content = new Content(collections.blog)
-  const props = { posts: fixDatesAndSort(await content.list(true)), collection: collections.blog }
+  const props = { posts: sortPosts(await content.list(true)), collection: collections.blog }
   return { props }
 }

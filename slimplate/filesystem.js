@@ -7,6 +7,11 @@ import { tt } from '@slimplate/utils'
 
 const cache = {}
 
+// this could be imported from somewhere else
+export const loadProcessors = {
+  date: v => (v || new Date()).toISOString()
+}
+
 export default class Content {
   constructor (collection, basePath = '.') {
     this.collection = collection
@@ -32,6 +37,15 @@ export default class Content {
     data.url = tt(this.collection.url, { ...data, filename, content })
     data.filename = filename
     cache[filename] = { ...data, children: content }
+
+    // post-process data
+    for (const f of Object.keys(cache[filename])) {
+      const field = this.collection.fields[f]
+      if (field && loadProcessors[field.type]) {
+        cache[filename][f] = loadProcessors[field.type](cache[filename][f])
+      }
+    }
+
     return cache[filename]
   }
 }
