@@ -1,11 +1,12 @@
 // backend functions for use on vercel
 
-import { minimatch } from 'minimatch'
+import matchUrl from 'match-url-wildcard'
 
 function validRedir (redirectUrlString, url) {
   const allUrls = redirectUrlString.split(',').map(s => s.trim()).filter(u => u)
-  const matchedURLS = allUrls.map(s => minimatch(url, s)).filter(u => u)
-  return !!matchedURLS.length
+  const matchedURLS = allUrls.find(s => matchUrl(url, s))
+  console.log({ allUrls, matchedURLS })
+  return !!matchedURLS
 }
 
 // top login function that triggers GH to authorize

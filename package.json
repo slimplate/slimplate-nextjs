@@ -16,6 +16,7 @@
     "frontmatter": "latest",
     "glob": "latest",
     "inflection": "latest",
+    "match-url-wildcard": "^0.0.4",
     "minimatch": "latest",
     "next": "latest",
     "postcss": "latest",
