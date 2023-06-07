@@ -5,7 +5,7 @@
   "scripts": {
     "start": "next dev",
     "build": "next build",
-    "deploy": "npx -y vercel@latest -- --prod"
+    "deploy": "vercel deploy --prod ."
   },
   "dependencies": {
     "@isomorphic-git/lightning-fs": "latest",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "latest",
-    "daisyui": "latest"
+    "daisyui": "latest",
+    "vercel": "^30.2.0"
   }
 }
