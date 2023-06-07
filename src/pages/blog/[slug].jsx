@@ -53,7 +53,6 @@ export async function getStaticPaths () {
 }
 
 export async function getStaticProps ({ params: { slug } }) {
-  // this pulls the server-side post
   const Content = (await import('@slimplate/filesystem')).default
   const content = new Content(collections.blog)
   const props = { slug, collection: collections.blog, post: findPostBySlugAndFixDate(slug, await content.list(true)) }
