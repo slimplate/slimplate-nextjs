@@ -19,7 +19,7 @@ user: full user-object, including token:
 You can get user with ButtonLogin
 */
 
-class Git {
+export default class Git {
   constructor (collection, repo, corsProxy = 'https://cors.isomorphic-git.org') {
     this.collection = collection
     this.corsProxy = corsProxy
@@ -33,16 +33,8 @@ class Git {
   async requireAuth () {
     if (localStorage.user) {
       this.user = JSON.parse(localStorage.user)
-      if (this.user) {
-        this.fs = new LightningFS(this.user.login)
-        this.pfs = this.fs.promises
-        return true
-      } else {
-        return false
-      }
-    } else {
-      return false
     }
+    return !!this.user
   }
 
   getAuthUrl () {
@@ -55,6 +47,9 @@ class Git {
   // make sure the repo is checked out
   async requireClone (opts) {
     if (await this.requireAuth()) {
+      this.fs = new LightningFS(this.user.login)
+      this.pfs = this.fs.promises
+
       try {
       // TODO: checkout repo here
       // also get this.repo info from oktokit
@@ -116,28 +111,5 @@ class Git {
   // get all files from collection
   async getAll () {
     return (await this.glob(this.collection.files))
-  }
-}
-
-// cached copy of git
-let gitCache
-
-export function useSlimplate (collection, repo, corsProxy = 'https://cors.isomorphic-git.org') {
-  return {
-    repo,
-    collection,
-
-    async getClientsideList () {
-      gitCache ||= new Git(collection, repo, corsProxy)
-      return gitCache.getAll()
-    },
-
-    async getClientsideItem (filename) {
-      gitCache ||= new Git(collection, repo, corsProxy)
-
-      // TODO: get single item from git
-
-      return null
-    }
   }
 }

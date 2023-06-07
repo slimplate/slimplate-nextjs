@@ -12,14 +12,14 @@ const widgetMap = {
   default: (value) => <input className={cx(inputClass)} type='text' defaultValue={value} />
 }
 
-export default function EditorPage ({ item, slimplate, children }) {
+export default function EditorPage ({ item, git, children }) {
   const [user] = useLocalStorage('user', false)
 
   if (!user) {
     return children
   }
 
-  const fields = slimplate.collection.fields
+  const fields = git.collection.fields
   const sortedFields = fields.sort((a, b) => {
     if (a.type === 'richtext') return 1
     if (b.type === 'richtext') return -1

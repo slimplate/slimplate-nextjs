@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import dateFormat from 'dateformat'
 import { EditorPage } from '@slimplate/daisyui'
-import { useSlimplate } from '@slimplate/github'
+import Git from '@slimplate/github'
 import { collections, repo } from '@/../.slimplate.json'
 
 // simple app util to find a post by slug, then format date
@@ -17,11 +17,11 @@ function findPostBySlugAndFixDate (slug, posts) {
 
 export default function ({ post, collection, slug }) {
   const [blogPost, setBlogPost] = useState(post)
-  const slimplate = useSlimplate(collection, repo, process.env.NEXT_PUBLIC_CORS_PROXY)
+  const git = new Git(collection, repo, process.env.NEXT_PUBLIC_CORS_PROXY)
 
   // this pulls the client-side post
   useEffect(() => {
-    slimplate.getClientsideList().then(posts => {
+    git.getAll().then(posts => {
       if (posts) {
         const p = findPostBySlugAndFixDate(slug, posts)
         if (p) {
@@ -32,7 +32,7 @@ export default function ({ post, collection, slug }) {
   }, [collection])
 
   return (
-    <EditorPage item={blogPost} slimplate={slimplate}>
+    <EditorPage item={blogPost} git={git}>
       <main className='prose m-auto'>
         server-side version:
         <pre>{JSON.stringify(blogPost, null, 2)}</pre>

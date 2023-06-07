@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import dateFormat from 'dateformat'
-import { useSlimplate } from '@slimplate/github'
+import Git from '@slimplate/github'
 import { repo, collections } from '@/../.slimplate.json'
 
 const sorter = new Intl.Collator()
@@ -17,10 +17,10 @@ function fixDatesAndSort (posts) {
 
 export default function ({ posts, collection }) {
   const [blogPosts, setBlogPosts] = useState(posts)
-  const { getClientsideList } = useSlimplate(collection, repo, process.env.NEXT_PUBLIC_CORS_PROXY)
+  const git = new Git(collection, repo, process.env.NEXT_PUBLIC_CORS_PROXY)
 
   useEffect(() => {
-    getClientsideList().then(p => {
+    git.getAll().then(p => {
       if (p) {
         setBlogPosts(fixDatesAndSort(p))
       }
