@@ -27,6 +27,10 @@ export default class Git {
       full_name: repo,
       url: `https://github.com/${repo}.git`
     }
+
+    for (const f of Object.keys(this.collection.fields)) {
+      this.collection.fields[f].name = f
+    }
   }
 
   // ensure user is logged in, before doing things

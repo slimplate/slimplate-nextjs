@@ -8,35 +8,35 @@
       "files": "/content/blog/**/*.mdx",
       "filename": "/content/blog/${dateFormat(date)}-${slug}.mdx",
       "fields": {
-  "title": {
-    "label": "Title",
-    "validators": [
-      "required"
-    ]
-  },
-  "slug": {
-    "label": "URL Slug",
-    "defaultValue": "${slugify(title)}",
-    "validators": [
-      "required"
-    ]
-  },
-  "children": {
-    "label": "Body",
-    "type": "richtext",
-    "validators": [
-      "required"
-    ]
-  },
-  "date": {
-    "label": "Date",
-    "type": "date",
-    "defaultValue": "${dateFormat()}",
-    "validators": [
-      "required"
-    ]
-  }
-}
+        "title": {
+          "label": "Title",
+          "validators": [
+            "required"
+          ]
+        },
+        "slug": {
+          "label": "URL Slug",
+          "defaultValue": "${slugify(title)}",
+          "validators": [
+            "required"
+          ]
+        },
+        "children": {
+          "label": "Body",
+          "type": "richtext",
+          "validators": [
+            "required"
+          ]
+        },
+        "date": {
+          "label": "Date",
+          "type": "date",
+          "defaultValue": "${dateFormat()}",
+          "validators": [
+            "required"
+          ]
+        }
+      }
     }
   }
 }

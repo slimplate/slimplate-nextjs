@@ -39,7 +39,7 @@ export default function ({ posts, collection }) {
 
 export async function getStaticProps () {
   const Content = (await import('@slimplate/filesystem')).default
-  const content = new Content(collections.blog)
+  const content = new Content(collections.blog, 'blog')
   const props = { posts: sortPosts(await content.list(true)), collection: collections.blog }
   return { props }
 }

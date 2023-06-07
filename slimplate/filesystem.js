@@ -13,9 +13,15 @@ export const loadProcessors = {
 }
 
 export default class Content {
-  constructor (collection, basePath = '.') {
+  constructor (collection, collectionName, basePath = '.') {
     this.collection = collection
     this.basePath = basePath
+
+    this.collection.name = collectionName
+
+    for (const f of Object.keys(this.collection.fields)) {
+      this.collection.fields[f].name = f
+    }
   }
 
   // get all filenames that matches files pattern in def
