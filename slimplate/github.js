@@ -18,10 +18,9 @@ You can get user with ButtonLogin
 */
 
 class Git {
-  constructor (collection, repoName, corsProxy = 'https://cors.isomorphic-git.org') {
+  constructor (collection, corsProxy = 'https://cors.isomorphic-git.org') {
     this.collection = collection
     this.corsProxy = corsProxy
-    this.repoName = repoName
   }
 
   // ensure user is logged in, before doing things
@@ -90,6 +89,8 @@ let git
 
 export function useSlimplate (collection, corsProxy = 'https://cors.isomorphic-git.org') {
   return {
+    collection,
+
     async getClientsideList () {
       git ||= new Git(collection, corsProxy)
       return git.getAll()

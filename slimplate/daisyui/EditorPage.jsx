@@ -3,7 +3,7 @@
 import { IconPencil } from '@tabler/icons-react'
 import { useLocalStorage } from '@slimplate/utils'
 
-export default function EditorPage ({ item, children }) {
+export default function EditorPage ({ item, slimplate, children }) {
   const [user] = useLocalStorage('user', false)
 
   if (!user) {
@@ -22,6 +22,10 @@ export default function EditorPage ({ item, children }) {
         <div className='menu p-4 w-80 h-full bg-base-200 text-base-content'>
           <label htmlFor='slimplate-drawer' className='btn btn-primary mt-4'>COOL!</label>
           <h2>EDITOR HERE</h2>
+          {/**
+          item is server-side version of this
+          get the client-side version from slimplate.getClientsideItem, and if it's not set, use server-side version
+          **/}
         </div>
       </div>
     </div>
