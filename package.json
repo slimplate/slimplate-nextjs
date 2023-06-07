@@ -12,6 +12,7 @@
     "@octokit/rest": "^19.0.11",
     "@tabler/icons-react": "latest",
     "autoprefixer": "latest",
+    "classnames": "^2.3.2",
     "dateformat": "latest",
     "frontmatter": "latest",
     "glob": "latest",

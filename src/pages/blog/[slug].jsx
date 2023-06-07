@@ -18,18 +18,18 @@ function findPostBySlugAndFixDate (slug, posts) {
 export default function ({ post, collection, slug }) {
   const [blogPost, setBlogPost] = useState(post)
   const slimplate = useSlimplate(collection, process.env.NEXT_PUBLIC_CORS_PROXY)
-
-  // this pulls the client-side post
-  useEffect(() => {
-    slimplate.getClientsideList().then(posts => {
-      if (posts) {
-        const p = findPostBySlugAndFixDate(slug, posts)
-        if (p) {
-          setBlogPost(p)
-        }
-      }
-    })
-  }, [collection])
+  //
+  //   // this pulls the client-side post
+  //   useEffect(() => {
+  //     slimplate.getClientsideList().then(posts => {
+  //       if (posts) {
+  //         const p = findPostBySlugAndFixDate(slug, posts)
+  //         if (p) {
+  //           setBlogPost(p)
+  //         }
+  //       }
+  //     })
+  //   }, [collection])
 
   return (
     <EditorPage item={blogPost} slimplate={slimplate}>

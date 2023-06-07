@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import dateFormat from 'dateformat'
-import { useSlimplate } from '@slimplate/github'
+import { useEffect, useState } from 'react'
 import collections from '@/../.slimplate.json'
+import { useSlimplate } from '@slimplate/github'
 
 const sorter = new Intl.Collator()
 
@@ -17,15 +17,15 @@ function fixDatesAndSort (posts) {
 
 export default function ({ posts, collection }) {
   const [blogPosts, setBlogPosts] = useState(posts)
-  const { getClientsideList } = useSlimplate(collection, process.env.NEXT_PUBLIC_CORS_PROXY)
-
-  useEffect(() => {
-    getClientsideList().then(p => {
-      if (p) {
-        setBlogPosts(fixDatesAndSort(p))
-      }
-    })
-  }, [collection])
+  // const { getClientsideList } = useSlimplate(collection, process.env.NEXT_PUBLIC_CORS_PROXY)
+  //
+  //   useEffect(() => {
+  //     getClientsideList().then(p => {
+  //       if (p) {
+  //         setBlogPosts(fixDatesAndSort(p))
+  //       }
+  //     })
+  //   }, [collection])
 
   return (
     <main className='prose m-auto'>
