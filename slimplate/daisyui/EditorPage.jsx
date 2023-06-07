@@ -1,10 +1,10 @@
 // Client-side editor drawer
 
 import { IconPencil } from '@tabler/icons-react'
-import { useLocalStorage } from 'react-use'
+import { useLocalStorage } from '@slimplate/utils'
 
 export default function EditorPage ({ item, children }) {
-  const [user, setUser, removeUser] = useLocalStorage('user', false)
+  const [user, setUser] = useLocalStorage('user', false)
 
   if (!user) {
     return children

@@ -20,7 +20,6 @@
     "postcss": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-use": "latest",
     "short-uuid": "latest",
     "slugify": "latest",
     "tailwindcss": "latest",

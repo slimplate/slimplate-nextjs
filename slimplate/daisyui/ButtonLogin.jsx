@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useLocalStorage } from 'react-use'
+import { useLocalStorage } from '@slimplate/utils'
 import { Octokit } from '@octokit/rest'
 
 export default function ButtonLogin ({ backendURL, redirectURL, scope = 'repo read:org read:user user:email' }) {
-  const [user, setUser, removeUser] = useLocalStorage('user', false)
+  const [user, setUser] = useLocalStorage('user', false)
 
   useEffect(() => {
     const s = new URL(document.location)
@@ -26,7 +26,7 @@ export default function ButtonLogin ({ backendURL, redirectURL, scope = 'repo re
   return (
     <div>
       {user
-        ? (<button className='btn' onClick={() => removeUser()}>Logout</button>)
+        ? (<button className='btn' onClick={() => setUser(null)}>Logout</button>)
         : (<button className='btn' onClick={onLoginClick}>Login</button>)}
     </div>
   )
