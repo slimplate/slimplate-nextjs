@@ -1,8 +1,11 @@
-import minimatch from 'minimatch'
+/* global localStorage */
+import { minimatch } from 'minimatch'
+import git from 'isomorphic-git'
+import http from 'isomorphic-git/http/web/index.js'
+
 import LightningFS from '@isomorphic-git/lightning-fs'
 
 /*
-
 collection: full collection object from .slimplate.json
 user: full user-object, including token:
 
@@ -14,13 +17,18 @@ user: full user-object, including token:
 }
 
 You can get user with ButtonLogin
-
 */
 
 class Git {
   constructor (collection, corsProxy = 'https://cors.isomorphic-git.org') {
     this.collection = collection
     this.corsProxy = corsProxy
+
+    // TODO: Remove this is temp (need to get repo)
+    this.repo = {
+      full_name: 'slimplate/private-tester',
+      url: 'https://github.com/slimplate/private-tester.git'
+    }
   }
 
   // ensure user is logged in, before doing things
@@ -39,12 +47,41 @@ class Git {
     }
   }
 
+  getAuthUrl () {
+    const u = new URL(this.repo.url)
+    u.username = this.user.login
+    u.password = this.user.token
+    return u.toString()
+  }
+
   // make sure the repo is checked out
-  async requireClone () {
+  async requireClone (opts) {
     if (await this.requireAuth()) {
       // TODO: checkout repo here
       // also get this.repo info from oktokit
+      const o = {
+        fs: this.fs,
+        http,
+        dir: `/${this.repo.full_name}`,
+        corsProxy: this.corsProxy,
+        url: this.getAuthUrl(),
+        ref: 'main',
+        singleBranch: true,
+        depth: 1,
+        author: {
+          name: this.user.name,
+          email: this.user.email || this.user.login
+        },
+        ...opts
+      }
 
+      console.log('Clone options: ', o)
+
+      const c = await git.clone(o)
+      console.log('clone', c)
+      if (c) {
+        return true
+      }
       // if clone went ok
       return false
     }
@@ -85,19 +122,19 @@ class Git {
 }
 
 // cached copy of git
-let git
+let gitCache
 
 export function useSlimplate (collection, corsProxy = 'https://cors.isomorphic-git.org') {
   return {
     collection,
 
     async getClientsideList () {
-      git ||= new Git(collection, corsProxy)
-      return git.getAll()
+      gitCache ||= new Git(collection, corsProxy)
+      return gitCache.getAll()
     },
 
     async getClientsideItem (filename) {
-      git ||= new Git(collection, corsProxy)
+      gitCache ||= new Git(collection, corsProxy)
 
       // TODO: get single item from git
 
