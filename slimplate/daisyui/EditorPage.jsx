@@ -14,7 +14,7 @@ export default function EditorPage ({ item, children }) {
     <div className='drawer'>
       <input id='slimplate-drawer' type='checkbox' className='drawer-toggle' />
       <div className='drawer-content'>
-        <label htmlFor='slimplate-drawer' className='sticky top-2 btn drawer-button'><IconPencil>Edit</IconPencil></label>
+        <label htmlFor='slimplate-drawer' className='sticky top-2 left-2 btn drawer-button'><IconPencil>Edit</IconPencil></label>
         {children}
       </div>
       <div className='drawer-side'>
