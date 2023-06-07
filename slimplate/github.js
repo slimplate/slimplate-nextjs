@@ -42,7 +42,7 @@ export default class Git {
     this.fs = new LightningFS(this.user.login)
     this.pfs = this.fs.promises
 
-    if (await this.exists('/.git/config')) {
+    if (await this.exists('.git/config')) {
       await this.pull()
     } else {
       await this.clone()
