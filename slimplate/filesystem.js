@@ -1,9 +1,8 @@
 // Server-side manager of content
 
 import { glob } from 'glob'
-import { readFileSync } from 'fs'
 import frontmatter from 'frontmatter'
-import { readFile } from 'fs/promises'
+import { readFileSync } from 'fs'
 import { tt } from '@slimplate/utils'
 
 const cache = {}
@@ -29,7 +28,7 @@ export default class Content {
     if (cache[filename]) {
       return cache[filename]
     }
-    const { data, content } = frontmatter(await readFile(this.basePath + filename, 'utf8'))
+    const { data, content } = frontmatter(readFileSync(this.basePath + filename, 'utf8'))
     data.url = tt(this.collection.url, { ...data, filename, content })
     data.filename = filename
     cache[filename] = { ...data, children: content }

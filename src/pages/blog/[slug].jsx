@@ -42,7 +42,17 @@ export default function ({ post, collection, slug }) {
   )
 }
 
-export async function getServerSideProps ({ query: { slug } }) {
+export async function getStaticPaths () {
+  const Content = (await import('@slimplate/filesystem')).default
+  const content = new Content(collections.blog)
+  const paths = (await content.list(true)).map(post => ({ params: { slug: post.slug } }))
+  return {
+    paths,
+    fallback: false
+  }
+}
+
+export async function getStaticProps ({ params: { slug } }) {
   // this pulls the server-side post
   const Content = (await import('@slimplate/filesystem')).default
   const content = new Content(collections.blog)
