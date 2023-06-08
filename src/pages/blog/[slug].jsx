@@ -50,7 +50,7 @@ export default function ({ post, collection, slug }) {
         }
       }
     })
-  }, [])
+  }, [user])
 
   return (
     <>

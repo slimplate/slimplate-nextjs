@@ -35,7 +35,7 @@ export default function ({ posts, collection }) {
         }
       }
     })
-  }, [collection])
+  }, [collection, user])
 
   return (
     <>
