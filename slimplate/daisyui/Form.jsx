@@ -18,7 +18,6 @@ export default function Form ({ collection, item }) {
       <div key={name}>
         <label>{field.label}:</label>
         <InputElement value={value} />
-        {inputElement}
       </div>
     )
   })
