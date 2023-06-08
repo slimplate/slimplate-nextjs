@@ -5,6 +5,7 @@ import { useLocalStorage, tt } from '@slimplate/utils'
 import Form from './Form'
 import Git from '@slimplate/github'
 import s from '@/../.slimplate.json'
+import YAML from 'yaml'
 
 const { repo, branch } = s
 
@@ -26,14 +27,19 @@ export default function EditorPage ({ item, collection, children }) {
     git.init().then(async () => {
       if (git.updated) {
         const filename = tt(collection.filename, { ...item, date: item.date.substring(0, 10) })
-        await git.pull()
+
+        const { children, ...frontmatter } = values
+        const content = '---\n' + YAML.stringify(frontmatter) + '---\n' + (children || '')
+        console.log(filename, content)
 
         await git.mkdirp(dirname(filename))
-        await git.write(filename, values)
+        await git.write(filename, content)
         await git.add(filename)
         await git.commit('edited "' + filename + '" article.')
 
-        await git.push()
+        // this should be done in a seperate sync
+        // await git.pull()
+        // await git.push()
       }
     })
 
