@@ -14,16 +14,24 @@ export default function EditorPage ({ item, collection, children }) {
     return children
   }
 
+  // const remote = (await git.fetch()).fetchHead
+  //      const log = await git.log()
+  //      const local = log[0].oid
+  // const diff = await git.diff(remote, local)
+  const dirname = (f) => f.split('/').slice(0, -1).join('/')
+
   const handleSubmit = () => {
     console.log(collection.filename)
     const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
     git.init().then(async () => {
       if (git.updated) {
-        console.log(collection)
-        await git.pull()
         const filename = tt(collection.filename, { ...item, date: item.date.substring(0, 10) })
+
+        await git.mkdirp(dirname(filename))
+        await git.write(filename, item)
         await git.add(filename)
-        await git.commit('making test')
+        await git.commit('edited "' + filename + '" article.')
+
         await git.push()
       }
     })

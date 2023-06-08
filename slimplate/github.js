@@ -194,7 +194,62 @@ export default class Git {
 
   // get diff between two commits
   async diff (commitHash1, commitHash2) {
-    // TODO: this should be tidied up
+    // pre-compute array of all files
+    const filesWeCareAbout = Object.values(this?.repo?.collections || {}).map(({ files }) => files)
+
+    return git.walk({
+      fs: this.fs,
+      dir: `/${this.repo.full_name}`,
+      trees: [git.TREE({ ref: commitHash1 }), git.TREE({ ref: commitHash2 })],
+      map: async (filepath, [A, B]) => {
+        // ignore directories
+        if (filepath === '.') {
+          return
+        }
+        if ((await A?.type()) === 'tree' || (await B?.type()) === 'tree') {
+          return
+        }
+
+        // make sure it's a file we care about
+        let match = false
+        for (const filesPattern of filesWeCareAbout) {
+          if (minimatch(`/${filepath}`, filesPattern)) {
+            match = true
+            break
+          }
+        }
+
+        if (!match) {
+          return
+        }
+
+        // generate ids
+        const Aoid = A && (await A.oid())
+        const Boid = B && (await B.oid())
+
+        // determine modification type
+        let type = 'equal'
+        if (Aoid !== Boid) {
+          type = 'modify'
+        }
+        if (!Aoid) {
+          type = 'added'
+        }
+        if (!Boid) {
+          type = 'removed'
+        }
+        if (Aoid === undefined && Boid === undefined) {
+          console.log('Something weird happened:')
+          console.log(A)
+          console.log(B)
+        }
+
+        return {
+          path: `/${filepath}`,
+          type
+        }
+      }
+    })
   }
 
   // git push from local filesystem
