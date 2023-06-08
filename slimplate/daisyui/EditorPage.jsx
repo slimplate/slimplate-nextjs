@@ -1,7 +1,7 @@
 // Client-side editor drawer
 import { IconPencil, IconPlus } from '@tabler/icons-react'
 import { useLocalStorage } from '@slimplate/utils'
-import Form from './form'
+import Form from './Form'
 
 export default function EditorPage ({ item, collection, children }) {
   const [user] = useLocalStorage('user', false)

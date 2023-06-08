@@ -3,10 +3,10 @@ import dateFormat from 'dateformat'
 
 const inputClass = 'p-2 bg-base-100 border border-neutral-500/20 rounded-md w-full'
 export const widgetMap = {
-  richtext: ({ value }) => <textarea className={cx(inputClass)} rows='10' cols='40' defaultValue={value} />,
-  date: ({ value }) => <input className={cx(inputClass)} type='date' defaultValue={dateFormat(value, 'yyyy-mm-dd')} />,
-  color: ({ value }) => <input className={cx(inputClass)} type='color' defaultValue={value || '#FFFFFF'} />,
-  default: ({ value }) => <input className={cx(inputClass)} type='text' defaultValue={value} />
+  richtext: ({ value, name }) => <textarea id={name} name={name} className={cx(inputClass)} rows='10' cols='40' defaultValue={value} />,
+  date: ({ value, name }) => <input id={name} name={name} className={cx(inputClass)} type='date' defaultValue={dateFormat(value, 'yyyy-mm-dd')} />,
+  color: ({ value, name }) => <input id={name} name={name} className={cx(inputClass)} type='color' defaultValue={value || '#FFFFFF'} />,
+  default: ({ value, name }) => <input id={name} name={name} className={cx(inputClass)} type='text' defaultValue={value} />
 }
 
 export default function Form ({ collection, item }) {
@@ -16,8 +16,8 @@ export default function Form ({ collection, item }) {
     const InputElement = widgetMap[field.type] || widgetMap.default
     return (
       <div key={name}>
-        <label>{field.label}:</label>
-        <InputElement value={value} />
+        <label htmlFor={name}>{field.label}:</label>
+        <InputElement value={value} name={name} />
       </div>
     )
   })
