@@ -19,8 +19,6 @@ export default class Git {
     for (const f of Object.keys(this.collection.fields)) {
       this.collection.fields[f].name = f
     }
-
-    this.cache = {}
   }
 
   // return true if the file/dir exists in filesystyem
@@ -273,23 +271,19 @@ export default class Git {
   async getAllItems () {
     const out = []
     for (const filename of await this.glob(this.collection.files)) {
-      if (this.cache[filename]) {
-        out.push(this.cache[filename])
-        continue
-      }
       const { data, content } = frontmatter(await this.read(filename, 'utf8'))
       data.url = tt(this.collection.url, { ...data, filename, content })
       data.filename = filename
-      this.cache[filename] = { ...data, children: content }
+      const record = { ...data, children: content }
 
       // post-process data
-      for (const f of Object.keys(this.cache[filename])) {
+      for (const f of Object.keys(record)) {
         const field = this.collection.fields[f]
         if (field && loadProcessors[field.type]) {
-          this.cache[filename][f] = loadProcessors[field.type](this.cache[filename][f])
+          record[f] = loadProcessors[field.type](record[f])
         }
       }
-      out.push(this.cache[filename])
+      out.push(record)
     }
     return out
   }

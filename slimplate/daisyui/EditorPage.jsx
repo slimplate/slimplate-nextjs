@@ -1,7 +1,7 @@
 // Client-side editor drawer
 import { IconPencil, IconPlus } from '@tabler/icons-react'
 import { useLocalStorage } from '@slimplate/utils'
-import { renderFields } from './form'
+import Form from './form'
 
 export default function EditorPage ({ item, collection, children }) {
   const [user] = useLocalStorage('user', false)
@@ -24,7 +24,7 @@ export default function EditorPage ({ item, collection, children }) {
       <div className='drawer-side'>
         <label htmlFor='slimplate-drawer' className='drawer-overlay' />
         <div className='menu h-full bg-base-200 text-base-content flex flex-col gap-4'>
-          {renderFields(collection, item)}
+          <Form collection={collection} item={item} />
           <label htmlFor='slimplate-drawer' className='btn btn-primary mt-4'>Save</label>
         </div>
       </div>

@@ -9,7 +9,7 @@ export const widgetMap = {
   default: (value) => <input className={cx(inputClass)} type='text' defaultValue={value} />
 }
 
-export const renderFields = (collection, item) => {
+export default function Form ({ collection, item }) {
   return Object.keys(collection.fields).map((name) => {
     const field = collection.fields[name]
     const value = item ? item[name] : ''
