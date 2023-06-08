@@ -22,17 +22,17 @@
             "required"
           ]
         },
-        "children": {
-          "label": "Body",
-          "type": "richtext",
-          "validators": [
-            "required"
-          ]
-        },
         "date": {
           "label": "Date",
           "type": "date",
           "defaultValue": "${dateFormat()}",
+          "validators": [
+            "required"
+          ]
+        },
+        "children": {
+          "label": "Body",
+          "type": "richtext",
           "validators": [
             "required"
           ]
