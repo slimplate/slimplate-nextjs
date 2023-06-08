@@ -30,7 +30,6 @@ export default function EditorPage ({ item, collection, children }) {
 
         const { children, ...frontmatter } = values
         const content = '---\n' + YAML.stringify(frontmatter) + '---\n' + (children || '')
-        console.log(filename, content)
 
         await git.mkdirp(dirname(filename))
         await git.write(filename, content)
