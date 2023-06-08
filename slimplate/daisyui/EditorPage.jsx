@@ -1,9 +1,12 @@
 // Client-side editor drawer
 import { useRef } from 'react'
 import { IconPencil, IconPlus } from '@tabler/icons-react'
-import { useLocalStorage } from '@slimplate/utils'
+import { useLocalStorage, tt } from '@slimplate/utils'
 import Form from './Form'
 import Git from '@slimplate/github'
+import s from '@/../.slimplate.json'
+
+const { repo, branch } = s
 
 export default function EditorPage ({ item, collection, children }) {
   const [user] = useLocalStorage('user', false)
@@ -13,18 +16,20 @@ export default function EditorPage ({ item, collection, children }) {
     return children
   }
 
+  const dirname = (f) => f.split('/').slice(0, -1).join('/')
+
   const handleSubmit = e => {
     e.preventDefault()
     const values = Object.fromEntries(new FormData(e.currentTarget).entries())
-    console.log(values)
 
     const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
     git.init().then(async () => {
       if (git.updated) {
         const filename = tt(collection.filename, { ...item, date: item.date.substring(0, 10) })
+        await git.pull()
 
         await git.mkdirp(dirname(filename))
-        await git.write(filename, item)
+        await git.write(filename, values)
         await git.add(filename)
         await git.commit('edited "' + filename + '" article.')
 
