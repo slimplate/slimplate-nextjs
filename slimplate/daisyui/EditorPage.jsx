@@ -38,6 +38,7 @@ export default memo(function EditorPage ({ onUpdate = () => {}, item, collection
         r.current.checked = false
 
         // force re-render from parent by giving it the value from form
+        console.log('triggering EditorPage.onUpdate', { ...values, filename })
         onUpdate({ ...values, filename })
       }
     })
