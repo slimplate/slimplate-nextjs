@@ -3,14 +3,9 @@
 import { glob } from 'glob'
 import frontmatter from 'frontmatter'
 import { readFileSync } from 'fs'
-import { tt } from '@slimplate/utils'
+import { tt, loadProcessors } from '@slimplate/utils'
 
 const cache = {}
-
-// this could be imported from somewhere else
-export const loadProcessors = {
-  date: v => (v || new Date()).toISOString()
-}
 
 export default class Content {
   constructor (collection, collectionName, basePath = '.') {

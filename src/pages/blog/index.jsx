@@ -23,7 +23,7 @@ export default function ({ posts, collection }) {
     const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
     git.init().then(async () => {
       if (git.updated) {
-        const posts = await git.getAll()
+        const posts = await git.getAllItems()
         if (posts) {
           setBlogPosts(sortPosts(posts))
         }

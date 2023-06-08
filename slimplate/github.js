@@ -3,6 +3,8 @@ import { minimatch } from 'minimatch'
 import git from 'isomorphic-git'
 import http from 'isomorphic-git/http/web/index.js'
 import LightningFS from '@isomorphic-git/lightning-fs'
+import { tt, loadProcessors } from '@slimplate/utils'
+import frontmatter from 'frontmatter'
 
 export default class Git {
   constructor ({ collection, repo, proxy = 'https://cors.isomorphic-git.org', branch = 'main' }) {
@@ -17,6 +19,8 @@ export default class Git {
     for (const f of Object.keys(this.collection.fields)) {
       this.collection.fields[f].name = f
     }
+
+    this.cache = {}
   }
 
   // return true if the file/dir exists in filesystyem
@@ -264,5 +268,29 @@ export default class Git {
       } catch (error) {}
       prefix += directory + '/'
     }
+  }
+
+  async getAllItems () {
+    const out = []
+    for (const filename of await this.glob(this.collection.files)) {
+      if (this.cache[filename]) {
+        out.push(this.cache[filename])
+        continue
+      }
+      const { data, content } = frontmatter(await this.read(filename, 'utf8'))
+      data.url = tt(this.collection.url, { ...data, filename, content })
+      data.filename = filename
+      this.cache[filename] = { ...data, children: content }
+
+      // post-process data
+      for (const f of Object.keys(this.cache[filename])) {
+        const field = this.collection.fields[f]
+        if (field && loadProcessors[field.type]) {
+          this.cache[filename][f] = loadProcessors[field.type](this.cache[filename][f])
+        }
+      }
+      out.push(this.cache[filename])
+    }
+    return out
   }
 }

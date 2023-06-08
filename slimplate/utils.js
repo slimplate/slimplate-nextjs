@@ -14,7 +14,8 @@ export const slugify = value => s(value, { strict: true, lower: true }) // a_coo
 export const dateFormat = (format = 'yyyy-mm-dd', value) => df(new Date(value || Date.now()), format)
 export const titleize = value => inflection.titleize(value)
 
-export const tt = (value = '', vars) => tto.default(value || '', { uuid, shortUuid, slugify, dateFormat, ...vars })
+// tto has weird exports in differnt places....
+export const tt = (value = '', vars) => (tto?.default || tto)(value || '', { uuid, shortUuid, slugify, dateFormat, ...vars })
 
 // Hook that works simialr to useState, but persists in localStorage
 export function useLocalStorage (k, initialValue) {
@@ -49,4 +50,9 @@ export function useLocalStorage (k, initialValue) {
   }
 
   return [storedValue, setValue]
+}
+
+// process incoming fields like this
+export const loadProcessors = {
+  date: v => (v || new Date()).toISOString()
 }
