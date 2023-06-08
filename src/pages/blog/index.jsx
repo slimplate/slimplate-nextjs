@@ -5,6 +5,7 @@ import Head from 'next/head'
 import Git from '@slimplate/github'
 import s from '@/../.slimplate.json'
 import { EditorPage } from '@slimplate/daisyui'
+import { useLocalStorage } from '@slimplate/utils'
 const { collections, repo, branch } = s
 
 const sorter = new Intl.Collator()
@@ -18,9 +19,13 @@ function sortPosts (posts) {
 
 export default function ({ posts, collection }) {
   const [blogPosts, setBlogPosts] = useState(posts)
+  const [user] = useLocalStorage('user', false)
 
   // this pulls the client-side list of posts
   useEffect(() => {
+    if (!user) {
+      return
+    }
     const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
     git.init().then(async () => {
       if (git.updated) {

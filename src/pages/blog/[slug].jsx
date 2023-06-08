@@ -4,6 +4,8 @@ import { serialize } from 'next-mdx-remote/serialize'
 import Head from 'next/head'
 import { EditorPage } from '@slimplate/daisyui'
 import Git from '@slimplate/github'
+import { useLocalStorage } from '@slimplate/utils'
+
 import s from '@/../.slimplate.json'
 const { collections, repo, branch } = s
 
@@ -26,6 +28,7 @@ function findPostBySlug (slug, posts) {
 
 export default function ({ post, collection, slug }) {
   const [blogPost, setBlogPost] = useState(post)
+  const [user] = useLocalStorage('user', false)
 
   const updatePost = async (p) => {
     p.mdx = await serialize(p.children || '', { mdxOptions })
@@ -34,6 +37,9 @@ export default function ({ post, collection, slug }) {
 
   // this pulls the client-side post
   useEffect(() => {
+    if (!user) {
+      return
+    }
     const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
     git.init().then(async () => {
       const posts = await git.getAllItems()
