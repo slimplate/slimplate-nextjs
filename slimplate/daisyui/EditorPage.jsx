@@ -1,5 +1,5 @@
 // Client-side editor drawer
-import { useRef } from 'react'
+import { useRef, memo } from 'react'
 import YAML from 'yaml'
 import { IconPencil, IconPlus } from '@tabler/icons-react'
 import { useLocalStorage, tt } from '@slimplate/utils'
@@ -7,7 +7,7 @@ import Git from '@slimplate/github'
 import ButtonSync from './ButtonSync'
 import Form from './Form'
 
-export default function EditorPage ({ item, collection, repo, proxy, branch = 'main', children }) {
+export default memo(function EditorPage ({ item, collection, repo, proxy, branch = 'main', children }) {
   const [user] = useLocalStorage('user', false)
   const r = useRef()
 
@@ -66,4 +66,4 @@ export default function EditorPage ({ item, collection, repo, proxy, branch = 'm
       </div>
     </div>
   )
-}
+})

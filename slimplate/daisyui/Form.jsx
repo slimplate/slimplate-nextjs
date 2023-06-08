@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import cx from 'classnames'
 import dateFormat from 'dateformat'
 
@@ -9,7 +10,7 @@ export const widgetMap = {
   default: ({ value, onChange, name }) => <input id={name} name={name} className={cx(inputClass)} type='text' defaultValue={value} />
 }
 
-export default function Form ({ collection, item }) {
+export default memo(function Form ({ collection, item }) {
   return Object.keys(collection.fields).map((name) => {
     const field = collection.fields[name]
     const value = item ? item[name] : ''
@@ -22,4 +23,4 @@ export default function Form ({ collection, item }) {
       </div>
     )
   })
-}
+})
