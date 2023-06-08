@@ -62,6 +62,10 @@ export async function cors (url, req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,POST,OPTIONS')
   res.setHeader('Access-Control-Max-Age', '86400')
 
+  if (req.method != 'POST' && req.method != 'GET') {
+    return res.send(null)
+  }
+
   const requestHeaders = new Headers(req.headers)
 
   if (
@@ -73,21 +77,18 @@ export async function cors (url, req, res) {
     return res.send(null)
   }
 
-  // const apiURL = new URL(url.toString().replace(/^.+\/api\/cors/, 'https:/'))
+  const apiUrl = new URL('https://' + url)
 
-  console.log('https://' + url)
+  const request = new Request(apiUrl, req)
+  if (!requestHeaders.get('user-agent') || !requestHeaders.get('user-agent').startsWith('git/')) {
+    requestHeaders.set('user-agent', 'git/@isomorphic-git/cors-proxy')
+  }
+  requestHeaders.set('Origin', apiUrl.origin)
+  requestHeaders.set('Referer', apiUrl.toString())
+  requestHeaders.set('Host', apiUrl.hostname)
+  const response = await fetch(apiUrl, { headers: requestHeaders })
 
   res.send('OK')
-
-//   const apiUrl = new URL(req.url.toString().replace(/^.+\/api\/cors/, 'https:/'))
-//   const request = new Request(apiUrl, req)
-//   if (!req.headers.get('user-agent') || !req.headers.get('user-agent').startsWith('git/')) {
-//     request.headers.set('user-agent', 'git/@isomorphic-git/cors-proxy')
-//   }
-//   request.headers.set('Origin', apiUrl.origin)
-//   request.headers.set('Referer', apiUrl.toString())
-//   request.headers.set('Host', apiUrl.hostname)
-//   let response = await fetch(request)
 //
 //   response = new Response(response.body, response)
 //   if (response.headers.has('Location')) {

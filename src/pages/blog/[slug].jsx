@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { EditorPage } from '@slimplate/daisyui'
 import Git from '@slimplate/github'
 import s from '@/../.slimplate.json'
-const { collections, repo } = s
+const { collections, repo, branch } = s
 
 // simple app util to find a post by slug, then format date
 function findPostBySlug (slug, posts) {
@@ -19,7 +19,7 @@ export default function ({ post, collection, slug }) {
 
   // this pulls the client-side post
   useEffect(() => {
-    const git = new Git(collection, repo, process.env.NEXT_PUBLIC_CORS_PROXY)
+    const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
     git.init().then(async () => {
       if (git.updated) {
         const posts = await git.getAll()

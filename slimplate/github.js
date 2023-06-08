@@ -5,9 +5,9 @@ import http from 'isomorphic-git/http/web/index.js'
 import LightningFS from '@isomorphic-git/lightning-fs'
 
 export default class Git {
-  constructor (collection, repo, corsProxy = 'https://cors.isomorphic-git.org', branch = 'main') {
+  constructor ({ collection, repo, proxy = 'https://cors.isomorphic-git.org', branch = 'main' }) {
     this.collection = collection
-    this.corsProxy = corsProxy
+    this.proxy = proxy
     this.branch = branch
     this.repo = {
       full_name: repo,
@@ -54,7 +54,7 @@ export default class Git {
   getAuthUrl () {
     const u = new URL(this.repo.url)
     u.username = this.user.login
-    u.password = this.token
+    u.password = this.user.token
     return u.toString()
   }
 
@@ -64,7 +64,7 @@ export default class Git {
       fs: this.fs,
       http,
       dir: `/${this.repo.full_name}`,
-      corsProxy: this.corsProxy,
+      corsProxy: this.proxy,
       url: this.getAuthUrl(),
       ref: this.branch,
       singleBranch: true,
@@ -73,8 +73,16 @@ export default class Git {
         name: this.user.name,
         email: this.user.email || this.user.login
       },
+      // this will do a non-authed request first, then retry with creds. I prefer always with creds (basic auth in URL)
+      // onAuth: async () => {
+      //   return {
+      //     username: this.user.login,
+      //     password: this.user.token
+      //   }
+      // },
       ...opts
     }
+    console.log('CLONE', o)
     await git.clone(o)
   }
 
@@ -93,7 +101,7 @@ export default class Git {
       fs: this.fs,
       http,
       dir: `/${this.repo.full_name}`,
-      corsProxy: this.corsProxy,
+      corsProxy: this.proxy,
       url: this.getAuthUrl(),
       ref: this.branch,
       ...opts
@@ -107,7 +115,7 @@ export default class Git {
       ref: this.branch,
       http,
       dir: `/${this.repo.full_name}`,
-      corsProxy: this.corsProxy,
+      corsProxy: this.proxy,
       url: this.getAuthUrl(),
       ...opts
     })
@@ -152,7 +160,7 @@ export default class Git {
   async listServerRefs (opts) {
     return git.listServerRefs({
       http,
-      corsProxy: this.corsProxy,
+      corsProxy: this.proxy,
       url: this.getAuthUrl(),
       ...opts
     })
@@ -192,7 +200,7 @@ export default class Git {
     const o = {
       fs: this.fs,
       http,
-      corsProxy: this.corsProxy,
+      corsProxy: this.proxy,
       dir: `/${this.repo.full_name}`,
       ref: this.branch,
       url: this.getAuthUrl(),
@@ -210,7 +218,7 @@ export default class Git {
     const o = {
       fs: this.fs,
       http,
-      corsProxy: this.corsProxy,
+      corsProxy: this.proxy,
       dir: `/${this.repo.full_name}`,
       ref: this.branch,
       singleBranch: true,

@@ -4,7 +4,7 @@ import dateFormat from 'dateformat'
 import Git from '@slimplate/github'
 import s from '@/../.slimplate.json'
 import { EditorPage } from '@slimplate/daisyui'
-const { collections, repo } = s
+const { collections, repo, branch } = s
 
 const sorter = new Intl.Collator()
 
@@ -20,7 +20,7 @@ export default function ({ posts, collection }) {
 
   // this pulls the client-side list of posts
   useEffect(() => {
-    const git = new Git(collection, repo, process.env.NEXT_PUBLIC_CORS_PROXY)
+    const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
     git.init().then(async () => {
       if (git.updated) {
         const posts = await git.getAll()
