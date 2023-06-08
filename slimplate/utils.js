@@ -11,7 +11,7 @@ const uuidGenerator = shortuuid()
 export const uuid = () => uuidGenerator.uuid()
 export const shortUuid = () => uuidGenerator.new() // mhvXdrZT4jP5T8vBxuvm75
 export const slugify = value => s(value, { strict: true, lower: true }) // a_cool_title
-export const dateFormat = (format = 'yyyy-mm-dd', value) => df(new Date(value || Date.now()), format)
+export const dateFormat = (value, format = 'yyyy-mm-dd') => df(new Date(value || Date.now()), format)
 export const titleize = value => inflection.titleize(value)
 
 // tto has weird exports in differnt places....
