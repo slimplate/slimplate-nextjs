@@ -21,6 +21,7 @@
     "match-url-wildcard": "latest",
     "minimatch": "latest",
     "next": "latest",
+    "next-mdx-remote": "^4.4.1",
     "postcss": "latest",
     "react": "latest",
     "react-dom": "latest",

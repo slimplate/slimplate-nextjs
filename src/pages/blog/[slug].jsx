@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react'
+import { MDXRemote } from 'next-mdx-remote'
+import { serialize } from 'next-mdx-remote/serialize'
 import { EditorPage } from '@slimplate/daisyui'
 import Git from '@slimplate/github'
 import s from '@/../.slimplate.json'
 const { collections, repo, branch } = s
+
+const components = {
+  Button: ({ children, ...props }) => <button {...props} className='btn'>{children}</button>
+}
 
 // simple app util to find a post by slug, then format date
 function findPostBySlug (slug, posts) {
@@ -26,6 +32,7 @@ export default function ({ post, collection, slug }) {
         if (posts) {
           const p = findPostBySlug(slug, posts)
           if (p) {
+            p.mdx = await serialize(p.children || '')
             setBlogPost(p)
           }
         }
@@ -35,11 +42,8 @@ export default function ({ post, collection, slug }) {
 
   return (
     <EditorPage item={blogPost} collection={collection}>
-      <main className='prose m-auto'>
-        server-side version:
-        <pre>{JSON.stringify(blogPost, null, 2)}</pre>
-        collection:
-        <pre>{JSON.stringify(collection, null, 2)}</pre>
+      <main className='prose m-auto mb-4'>
+        <MDXRemote {...blogPost.mdx} components={components} />
       </main>
     </EditorPage>
   )
@@ -58,6 +62,12 @@ export async function getStaticPaths () {
 export async function getStaticProps ({ params: { slug } }) {
   const Content = (await import('@slimplate/filesystem')).default
   const content = new Content(collections.blog, 'blog')
-  const props = { slug, collection: collections.blog, post: findPostBySlug(slug, await content.list(true)) }
+  const post = findPostBySlug(slug, await content.list(true))
+  post.mdx = await serialize(post.children || '')
+  const props = {
+    slug,
+    collection: collections.blog,
+    post
+  }
   return { props }
 }
