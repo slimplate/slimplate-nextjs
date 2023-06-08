@@ -17,7 +17,7 @@ export default function Form ({ collection, item }) {
 
     return (
       <div key={name}>
-        <label htmlFor={name}>{field.label}:</label>
+        <label className='text-md' htmlFor={name}>{field.label}:</label>
         <InputElement value={value} name={name} />
       </div>
     )

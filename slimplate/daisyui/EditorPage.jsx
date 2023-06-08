@@ -59,10 +59,12 @@ export default function EditorPage ({ item, collection, children }) {
       </div>
       <div className='drawer-side'>
         <label htmlFor='slimplate-drawer' className='drawer-overlay' />
-        <form className='menu h-full bg-base-200 text-base-content flex flex-col gap-4' onSubmit={handleSubmit}>
+        <form className='p-4 menu h-full bg-base-200 text-base-content flex flex-col gap-4' onSubmit={handleSubmit}>
           <Form collection={collection} item={item} />
-          <label htmlFor='slimplate-drawer' className='btn mt-4'>Cancel</label>
-          <button type='submit' className='btn btn-primary mt-4'>{item ? 'Update' : 'Create'}</button>
+          <div className='flex gap-4'>
+            <label htmlFor='slimplate-drawer' className='btn btn-outline mt-4 flex-grow'>Cancel</label>
+            <button type='submit' className='btn btn-primary mt-4 basis-1/2'>{item ? 'Update' : 'Create'}</button>
+          </div>
         </form>
       </div>
     </div>
