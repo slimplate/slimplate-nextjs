@@ -13,11 +13,11 @@ export default function Form ({ collection, item }) {
   return Object.keys(collection.fields).map((name) => {
     const field = collection.fields[name]
     const value = item ? item[name] : ''
-
-    const inputElement = (widgetMap[field.type] || widgetMap.default)(value)
+    const InputElement = widgetMap[field.type] || widgetMap.default
     return (
       <div key={name}>
         <label>{field.label}:</label>
+        <InputElement value={value} />
         {inputElement}
       </div>
     )
