@@ -14,7 +14,7 @@ export default memo(function Form ({ collection, item }) {
   return Object.keys(collection.fields).map((name) => {
     const field = collection.fields[name]
     const value = item ? item[name] : ''
-    const InputElement = widgetMap[field.type] || widgetMap.default
+    const InputElement = memo(widgetMap[field.type] || widgetMap.default)
 
     return (
       <div key={name}>
