@@ -1,4 +1,9 @@
-import { ghlogin } from '@slimplate/vercel'
+import { ghlogin } from '@slimplate/edge'
+
+// this is required
+export const config = {
+  runtime: 'edge'
+}
 
 const { REDIRECT_URL, GITHUB_CLIENT, GITHUB_SECRET } = process.env
 
