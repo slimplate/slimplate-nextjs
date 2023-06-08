@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import dateFormat from 'dateformat'
+import Head from 'next/head'
 import Git from '@slimplate/github'
 import s from '@/../.slimplate.json'
 import { EditorPage } from '@slimplate/daisyui'
@@ -32,16 +33,21 @@ export default function ({ posts, collection }) {
   }, [collection])
 
   return (
-    <EditorPage collection={collection}>
-      <main className='prose m-auto'>
-        <h3>Blog</h3>
-        <ul>
-          {blogPosts.map(post => (
-            <li key={post.slug}><Link href={`/blog/${post.slug}`}>{post.title}</Link> - <small>{dateFormat(post.date, 'longDate')}</small></li>
-          ))}
-        </ul>
-      </main>
-    </EditorPage>
+    <>
+      <Head>
+        <title>Blog</title>
+      </Head>
+      <EditorPage collection={collection}>
+        <main className='prose m-auto'>
+          <h3>Blog</h3>
+          <ul>
+            {blogPosts.map(post => (
+              <li key={post.slug}><Link href={`/blog/${post.slug}`}>{post.title}</Link> - <small>{dateFormat(post.date, 'longDate')}</small></li>
+            ))}
+          </ul>
+        </main>
+      </EditorPage>
+    </>
   )
 }
 

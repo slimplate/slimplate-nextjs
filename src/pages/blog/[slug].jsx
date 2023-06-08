@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { MDXRemote } from 'next-mdx-remote'
 import { serialize } from 'next-mdx-remote/serialize'
+import Head from 'next/head'
 import { EditorPage } from '@slimplate/daisyui'
 import Git from '@slimplate/github'
 import s from '@/../.slimplate.json'
@@ -41,11 +42,16 @@ export default function ({ post, collection, slug }) {
   }, [collection])
 
   return (
-    <EditorPage item={blogPost} collection={collection}>
-      <main className='prose m-auto mb-4'>
-        <MDXRemote {...blogPost.mdx} components={components} />
-      </main>
-    </EditorPage>
+    <>
+      <Head>
+        <title>{blogPost.title ? `Blog - ${blogPost.title}` : 'Blog'}</title>
+      </Head>
+      <EditorPage item={blogPost} collection={collection}>
+        <main className='prose m-auto mb-4'>
+          <MDXRemote {...blogPost.mdx} components={components} />
+        </main>
+      </EditorPage>
+    </>
   )
 }
 
