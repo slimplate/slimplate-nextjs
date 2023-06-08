@@ -6,8 +6,6 @@ import { useLocalStorage } from '@slimplate/utils'
 export default function ButtonSync ({ collection, repo, proxy, branch = 'main', children = 'Sync' }) {
   const [user] = useLocalStorage('user', false)
 
-  console.log({ collection, repo, proxy, branch })
-
   if (!user) {
     return null
   }
