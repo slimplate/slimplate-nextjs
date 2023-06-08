@@ -25,7 +25,7 @@ export default function EditorPage ({ item, collection, children }) {
         <label htmlFor='slimplate-drawer' className='drawer-overlay' />
         <div className='menu h-full bg-base-200 text-base-content flex flex-col gap-4'>
           <Form collection={collection} item={item} />
-          <label htmlFor='slimplate-drawer' className='btn btn-primary mt-4'>Save</label>
+          <label htmlFor='slimplate-drawer' className='btn btn-primary mt-4'>{item ? 'Update' : 'Create'}</label>
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import git from 'isomorphic-git'
 import http from 'isomorphic-git/http/web/index.js'
 import LightningFS from '@isomorphic-git/lightning-fs'
 import { tt, loadProcessors } from '@slimplate/utils'
-import frontmatter from 'frontmatter'
+import matter from 'gray-matter'
 
 export default class Git {
   constructor ({ collection, repo, proxy = 'https://cors.isomorphic-git.org', branch = 'main' }) {
@@ -271,9 +271,10 @@ export default class Git {
   async getAllItems () {
     const out = []
     for (const filename of await this.glob(this.collection.files)) {
-      const { data, content } = frontmatter(await this.read(filename, 'utf8'))
+      const { data, content, excerpt } = matter(await this.read(filename, 'utf8'), { excerpt: true })
       data.url = tt(this.collection.url, { ...data, filename, content })
       data.filename = filename
+      data.excerpt = excerpt
       const record = { ...data, children: content }
 
       // post-process data
