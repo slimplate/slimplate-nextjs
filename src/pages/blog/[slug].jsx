@@ -46,7 +46,7 @@ export default function ({ post, collection, slug }) {
       <Head>
         <title>{blogPost.title ? `Blog - ${blogPost.title}` : 'Blog'}</title>
       </Head>
-      <EditorPage item={blogPost} collection={collection}>
+      <EditorPage item={blogPost} collection={collection} proxy={process.env.NEXT_PUBLIC_CORS_PROXY} repo={repo} branch={branch || 'main'}>
         <main className='prose m-auto mb-4'>
           <MDXRemote {...blogPost.mdx} components={components} />
         </main>

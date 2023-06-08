@@ -1,15 +1,13 @@
 // Client-side editor drawer
 import { useRef } from 'react'
+import YAML from 'yaml'
 import { IconPencil, IconPlus } from '@tabler/icons-react'
 import { useLocalStorage, tt } from '@slimplate/utils'
-import Form from './Form'
 import Git from '@slimplate/github'
-import s from '@/../.slimplate.json'
-import YAML from 'yaml'
+import ButtonSync from './ButtonSync'
+import Form from './Form'
 
-const { repo, branch } = s
-
-export default function EditorPage ({ item, collection, children }) {
+export default function EditorPage ({ item, collection, repo, proxy, branch = 'main', children }) {
   const [user] = useLocalStorage('user', false)
   const r = useRef()
 
@@ -23,7 +21,7 @@ export default function EditorPage ({ item, collection, children }) {
     e.preventDefault()
     const values = Object.fromEntries(new FormData(e.currentTarget).entries())
 
-    const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
+    const git = new Git({ collection, repo, proxy, branch })
     git.init().then(async () => {
       if (git.updated) {
         const filename = tt(collection.filename, { ...item, date: item.date.substring(0, 10) })
@@ -36,14 +34,10 @@ export default function EditorPage ({ item, collection, children }) {
         await git.add(filename)
         await git.commit('edited "' + filename + '" article.')
 
-        // this should be done in a seperate sync
-        // await git.pull()
-        // await git.push()
+        // close sidebar
+        r.current.checked = false
       }
     })
-
-    // close window
-    r.current.checked = false
   }
 
   return (
@@ -56,6 +50,9 @@ export default function EditorPage ({ item, collection, children }) {
             : <IconPlus>New</IconPlus>}
         </label>
         {children}
+        <div className='fixed top-16 right-2'>
+          <ButtonSync collection={collection} repo={repo} proxy={proxy} branch={branch} />
+        </div>
       </div>
       <div className='drawer-side'>
         <label htmlFor='slimplate-drawer' className='drawer-overlay' />

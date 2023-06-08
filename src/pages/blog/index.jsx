@@ -37,7 +37,7 @@ export default function ({ posts, collection }) {
       <Head>
         <title>Blog</title>
       </Head>
-      <EditorPage collection={collection}>
+      <EditorPage collection={collection} proxy={process.env.NEXT_PUBLIC_CORS_PROXY} repo={repo} branch={branch || 'main'}>
         <main className='prose m-auto'>
           <h3>Blog</h3>
           <ul>
