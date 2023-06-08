@@ -7,6 +7,9 @@ import Git from '@slimplate/github'
 import s from '@/../.slimplate.json'
 const { collections, repo, branch } = s
 
+// needed because of bug: https://github.com/hashicorp/next-mdx-remote/issues/350
+const mdxOptions = { development: process.env.NODE_ENV === 'development' }
+
 const components = {
   Button: ({ children, ...props }) => <button {...props} className='btn'>{children}</button>
 }
@@ -24,29 +27,31 @@ function findPostBySlug (slug, posts) {
 export default function ({ post, collection, slug }) {
   const [blogPost, setBlogPost] = useState(post)
 
+  const updatePost = async (p) => {
+    p.mdx = await serialize(p.children || '', { mdxOptions })
+    setBlogPost(p)
+  }
+
   // this pulls the client-side post
   useEffect(() => {
     const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
     git.init().then(async () => {
-      if (git.updated) {
-        const posts = await git.getAll()
-        if (posts) {
-          const p = findPostBySlug(slug, posts)
-          if (p) {
-            p.mdx = await serialize(p.children || '')
-            setBlogPost(p)
-          }
+      const posts = await git.getAllItems()
+      if (posts) {
+        const p = findPostBySlug(slug, posts)
+        if (p) {
+          updatePost(p)
         }
       }
     })
-  }, [collection])
+  }, [])
 
   return (
     <>
       <Head>
         <title>{blogPost.title ? `Blog - ${blogPost.title}` : 'Blog'}</title>
       </Head>
-      <EditorPage item={blogPost} collection={collection} proxy={process.env.NEXT_PUBLIC_CORS_PROXY} repo={repo} branch={branch || 'main'}>
+      <EditorPage onUpdate={updatePost} item={blogPost} collection={collection} proxy={process.env.NEXT_PUBLIC_CORS_PROXY} repo={repo} branch={branch || 'main'}>
         <main className='prose m-auto mb-4'>
           <MDXRemote {...blogPost.mdx} components={components} />
         </main>
@@ -69,7 +74,7 @@ export async function getStaticProps ({ params: { slug } }) {
   const Content = (await import('@slimplate/filesystem')).default
   const content = new Content(collections.blog, 'blog')
   const post = findPostBySlug(slug, await content.list(true))
-  post.mdx = await serialize(post.children || '')
+  post.mdx = await serialize(post.children || '', { mdxOptions })
   const props = {
     slug,
     collection: collections.blog,

@@ -1,13 +1,13 @@
 // Client-side editor drawer
-import { useRef, memo } from 'react'
+import { useRef, memo, useState } from 'react'
 import YAML from 'yaml'
 import { IconPencil, IconPlus } from '@tabler/icons-react'
-import { useLocalStorage, tt } from '@slimplate/utils'
+import { useLocalStorage, tt, dateFormat } from '@slimplate/utils'
 import Git from '@slimplate/github'
 import ButtonSync from './ButtonSync'
 import Form from './Form'
 
-export default memo(function EditorPage ({ item, collection, repo, proxy, branch = 'main', children }) {
+export default memo(function EditorPage ({ onUpdate = () => {}, item, collection, repo, proxy, branch = 'main', children }) {
   const [user] = useLocalStorage('user', false)
   const r = useRef()
 
@@ -24,7 +24,7 @@ export default memo(function EditorPage ({ item, collection, repo, proxy, branch
     const git = new Git({ collection, repo, proxy, branch })
     git.init().then(async () => {
       if (git.updated) {
-        const filename = item ? item.filename : tt(collection.filename, { ...item, date: item.date.substring(0, 10) })
+        const filename = item ? item.filename : tt(collection.filename, { ...values, date: new Date(values.date || undefined).toISOString() })
 
         const { children, ...frontmatter } = values
         const content = '---\n' + YAML.stringify(frontmatter) + '---\n' + (children || '')
@@ -36,6 +36,9 @@ export default memo(function EditorPage ({ item, collection, repo, proxy, branch
 
         // close sidebar
         r.current.checked = false
+
+        // force re-render from parent by giving it the value from form
+        onUpdate({ ...values, filename })
       }
     })
   }

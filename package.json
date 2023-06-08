@@ -9,13 +9,15 @@
   },
   "dependencies": {
     "@isomorphic-git/lightning-fs": "latest",
+    "@mdx-js/react": "2.3.0",
     "@octokit/rest": "latest",
     "@tabler/icons-react": "latest",
     "autoprefixer": "latest",
     "classnames": "latest",
     "dateformat": "latest",
+    "estree-util-build-jsx": "2.2.2",
     "glob": "latest",
-    "gray-matter": "^4.0.3",
+    "gray-matter": "latest",
     "inflection": "latest",
     "isomorphic-git": "latest",
     "match-url-wildcard": "latest",
@@ -29,7 +31,7 @@
     "slugify": "latest",
     "tailwindcss": "latest",
     "template-templates": "latest",
-    "yaml": "^2.3.1"
+    "yaml": "latest"
   },
   "devDependencies": {
     "@tailwindcss/typography": "latest",
