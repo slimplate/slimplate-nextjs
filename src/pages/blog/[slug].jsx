@@ -66,7 +66,7 @@ export async function getStaticPaths () {
   const paths = (await content.list(true)).map(post => ({ params: { slug: post.slug } }))
   return {
     paths,
-    fallback: false
+    fallback: true
   }
 }
 
@@ -75,6 +75,7 @@ export async function getStaticProps ({ params: { slug } }) {
   const content = new Content(collections.blog, 'blog')
   const post = findPostBySlug(slug, await content.list(true))
   post.mdx = await serialize(post.children || '', { mdxOptions })
+  // TODO: since this will fallthrough we should check somehow if they are logged in, and 404 on missing, if not
   const props = {
     slug,
     collection: collections.blog,
