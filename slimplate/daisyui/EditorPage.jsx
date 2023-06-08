@@ -24,7 +24,7 @@ export default function EditorPage ({ item, collection, repo, proxy, branch = 'm
     const git = new Git({ collection, repo, proxy, branch })
     git.init().then(async () => {
       if (git.updated) {
-        const filename = tt(collection.filename, { ...item, date: item.date.substring(0, 10) })
+        const filename = item ? item.filename : tt(collection.filename, { ...item, date: item.date.substring(0, 10) })
 
         const { children, ...frontmatter } = values
         const content = '---\n' + YAML.stringify(frontmatter) + '---\n' + (children || '')
