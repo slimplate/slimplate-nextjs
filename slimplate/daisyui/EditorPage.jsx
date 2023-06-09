@@ -1,7 +1,7 @@
 // Client-side editor drawer
 import { useRef, memo } from 'react'
 import YAML from 'yaml'
-import { IconPencil, IconPlus } from '@tabler/icons-react'
+import { IconPencil, IconPlus, IconX } from '@tabler/icons-react'
 import { useLocalStorage, tt } from '@slimplate/utils'
 import Git from '@slimplate/github'
 import ButtonSync from './ButtonSync'
@@ -44,15 +44,48 @@ export default memo(function EditorPage ({ status, showSync = false, onUpdate = 
     })
   }
 
+  const handleDelete = () => {
+    const git = new Git({ collection, repo, proxy, branch })
+    git.init().then(async () => {
+      if (git.updated) {
+        console.log(item.filename)
+        await git.rm(item.filename)
+        await git.commit('removed "' + item.filename + '.')
+        // TODO: needs to redirect back to the list
+      }
+    })
+  }
+
   return (
     <div className='drawer'>
       <input ref={r} id='slimplate-drawer' type='checkbox' className='drawer-toggle' />
       <div className='drawer-content'>
-        <label htmlFor='slimplate-drawer' className='sticky top-2 left-2 btn drawer-button'>
-          {item
-            ? <IconPencil>Edit</IconPencil>
-            : <IconPlus>New</IconPlus>}
-        </label>
+        <div className='flex flex-col gap-2 w-16 sticky top-2 left-2 '>
+          <label htmlFor='slimplate-drawer' className='btn drawer-button'>
+            {item
+              ? <IconPencil>Edit</IconPencil>
+              : <IconPlus>New</IconPlus>}
+          </label>
+
+          {item && (
+            <>
+              <button className='btn' onClick={() => window.my_modal_1.showModal()}><IconX>Close</IconX></button>
+              <dialog id='my_modal_1' className='modal'>
+                <form method='dialog' className='modal-box'>
+                  <h3 className='font-bold text-lg'>Delete article
+                  </h3>
+                  <h3 className='py-4'>Are you sure you wish to delete {collection.name} article
+                    <span className='ml-1 text-accent'>{item.title}</span>?
+                  </h3>
+                  <div className='modal-action'>
+                    <button onClick={handleDelete} className='btn btn-outline btn-error'>Delete</button>
+                  </div>
+                </form>
+              </dialog>
+            </>
+          )}
+        </div>
+
         {children}
         <div className='fixed top-20 right-2'>
           {showSync && (
@@ -63,6 +96,7 @@ export default memo(function EditorPage ({ status, showSync = false, onUpdate = 
           )}
         </div>
       </div>
+
       <div className='drawer-side'>
         <label htmlFor='slimplate-drawer' className='drawer-overlay' />
         <form className='p-4 menu h-full bg-base-200 text-base-content flex flex-col gap-4' onSubmit={handleSubmit}>
