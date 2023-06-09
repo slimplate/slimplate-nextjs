@@ -9,7 +9,7 @@ import Form from './Form'
 import { useRouter } from 'next/router'
 import StatusIndicator from './StatusIndicator'
 
-export default memo(function EditorPage ({ status, showSync = false, onUpdate = () => {}, item, collection, repo, proxy, branch = 'main', children }) {
+export default memo(function EditorPage ({ status, onUpdate = () => {}, item, collection, repo, proxy, branch = 'main', children }) {
   const [user] = useLocalStorage('user', false)
   const router = useRouter()
   const r = useRef()
@@ -89,7 +89,7 @@ export default memo(function EditorPage ({ status, showSync = false, onUpdate = 
 
         {children}
         <div className='fixed top-20 right-2'>
-          {showSync && (
+          {status && (
             <ButtonSync status={status} collection={collection} repo={repo} proxy={proxy} branch={branch}>
               <StatusIndicator status={status} />
               Sync
