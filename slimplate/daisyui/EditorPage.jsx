@@ -6,10 +6,12 @@ import { useLocalStorage, tt } from '@slimplate/utils'
 import Git from '@slimplate/github'
 import ButtonSync from './ButtonSync'
 import Form from './Form'
+import { useRouter } from 'next/router'
 import StatusIndicator from './StatusIndicator'
 
 export default memo(function EditorPage ({ status, showSync = false, onUpdate = () => {}, item, collection, repo, proxy, branch = 'main', children }) {
   const [user] = useLocalStorage('user', false)
+  const router = useRouter()
   const r = useRef()
 
   if (!user) {
@@ -48,10 +50,9 @@ export default memo(function EditorPage ({ status, showSync = false, onUpdate = 
     const git = new Git({ collection, repo, proxy, branch })
     git.init().then(async () => {
       if (git.updated) {
-        console.log(item.filename)
         await git.rm(item.filename)
         await git.commit('removed "' + item.filename + '.')
-        // TODO: needs to redirect back to the list
+        router.push(`/${collection.name}`)
       }
     })
   }
