@@ -66,6 +66,7 @@ export default function ({ posts, collection }) {
         <title>Blog</title>
       </Head>
       <EditorPage
+        showStatus
         status={status}
         repo={repo}
         collection={collection}
