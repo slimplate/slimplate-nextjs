@@ -1,7 +1,7 @@
 import Git from '@slimplate/github'
 import { useLocalStorage } from '@slimplate/utils'
 
-export default function ButtonSync ({ status, collection, repo, proxy, branch = 'main', children = 'Sync' }) {
+export default function ButtonSync ({ collection, repo, proxy, branch = 'main', children = 'Sync' }) {
   const [user] = useLocalStorage('user', false)
 
   if (!user) {
