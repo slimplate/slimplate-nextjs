@@ -1,8 +1,7 @@
 import Git from '@slimplate/github'
 import { useLocalStorage } from '@slimplate/utils'
-import StatusIndicator from './StatusIndicator'
 
-export default function ButtonSync ({ collection, repo, proxy, branch = 'main', children = 'Sync' }) {
+export default function ButtonSync ({ status, collection, repo, proxy, branch = 'main', children = 'Sync' }) {
   const [user] = useLocalStorage('user', false)
 
   if (!user) {
@@ -22,7 +21,6 @@ export default function ButtonSync ({ collection, repo, proxy, branch = 'main', 
   return (
     <>
       <button onClick={handleClick} className='btn btn-primary'>
-        <StatusIndicator collection={collection} repo={repo} proxy={proxy} branch={branch} />
         {children}
       </button>
     </>
