@@ -60,6 +60,16 @@ export default class Git {
     return u.toString()
   }
 
+  async getProjectStatus () {
+    const remote = (await this.fetch()).fetchHead
+    const log = await this.log()
+    const local = log[0].oid
+
+    const diff = await this.diff(remote, local)
+    diff.commitsAhead = log.findIndex(c => c.oid === remote)
+    return diff
+  }
+
   // clone a repo
   async clone (opts) {
     const o = {
@@ -84,7 +94,6 @@ export default class Git {
       // },
       ...opts
     }
-    console.log('CLONE', o)
     await git.clone(o)
   }
 
@@ -193,63 +202,61 @@ export default class Git {
   }
 
   // get diff between two commits
-  async diff (commitHash1, commitHash2) {
-    // pre-compute array of all files
-    const filesWeCareAbout = Object.values(this?.repo?.collections || {}).map(({ files }) => files)
 
-    return git.walk({
+  async diff (commitHash1, commitHash2) {
+  // get the list of files for commit 1
+    let commit1Files = await git.listFiles({
       fs: this.fs,
       dir: `/${this.repo.full_name}`,
-      trees: [git.TREE({ ref: commitHash1 }), git.TREE({ ref: commitHash2 })],
-      map: async (filepath, [A, B]) => {
-        // ignore directories
-        if (filepath === '.') {
-          return
-        }
-        if ((await A?.type()) === 'tree' || (await B?.type()) === 'tree') {
-          return
-        }
+      ref: commitHash1
+    })
 
-        // make sure it's a file we care about
-        let match = false
-        for (const filesPattern of filesWeCareAbout) {
-          if (minimatch(`/${filepath}`, filesPattern)) {
-            match = true
-            break
-          }
-        }
+    // get the list of files for commit 2
+    let commit2Files = await git.listFiles({
+      fs: this.fs,
+      dir: `/${this.repo.full_name}`,
+      ref: commitHash2
+    })
 
-        if (!match) {
-          return
-        }
+    commit1Files = commit1Files.filter(file => minimatch(file, this.collection.files.substring(1)))
+    commit2Files = commit2Files.filter(file => minimatch(file, this.collection.files.substring(1)))
 
-        // generate ids
-        const Aoid = A && (await A.oid())
-        const Boid = B && (await B.oid())
+    const removedFiles = commit1Files.filter(f => !commit2Files.includes(f))
+    const addedFiles = commit2Files.filter(f => !commit1Files.includes(f))
 
-        // determine modification type
-        let type = 'equal'
-        if (Aoid !== Boid) {
-          type = 'modify'
-        }
-        if (!Aoid) {
-          type = 'added'
-        }
-        if (!Boid) {
-          type = 'removed'
-        }
-        if (Aoid === undefined && Boid === undefined) {
-          console.log('Something weird happened:')
-          console.log(A)
-          console.log(B)
-        }
+    const modifiedFiles = []
 
-        return {
-          path: `/${filepath}`,
-          type
+    if (commitHash1 !== commitHash2) {
+      for (const file of commit1Files.filter(f => commit2Files.includes(f))) {
+        const [blob1, blob2] = await Promise.all([
+          git.readBlob({
+            fs: this.fs,
+            dir: `/${this.repo.full_name}`,
+            filepath: file,
+            oid: commitHash1
+          }),
+          git.readBlob({
+            fs: this.fs,
+            dir: `/${this.repo.full_name}`,
+            filepath: file,
+            oid: commitHash2
+          })
+        ])
+
+        if (blob1.oid !== blob2.oid) {
+          modifiedFiles.push(file)
         }
       }
-    })
+    }
+
+    const inSync = removedFiles.length === 0 && addedFiles.length === 0 && modifiedFiles.length === 0
+
+    return {
+      removedFiles,
+      addedFiles,
+      modifiedFiles,
+      inSync
+    }
   }
 
   // git push from local filesystem

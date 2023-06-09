@@ -20,22 +20,44 @@ function sortPosts (posts) {
 export default function ({ posts, collection }) {
   const [blogPosts, setBlogPosts] = useState(posts)
   const [user] = useLocalStorage('user', false)
+  const [status, setStatus] = useState(false)
+  const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
 
   // this pulls the client-side list of posts
   useEffect(() => {
     if (!user) {
       return
     }
-    const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
     git.init().then(async () => {
       if (git.updated) {
         const posts = await git.getAllItems()
+        setStatus(await git.getProjectStatus())
         if (posts) {
           setBlogPosts(sortPosts(posts))
         }
       }
     })
-  }, [collection, user])
+  }, [collection, user, posts])
+
+  useEffect(() => {
+    if (!user) {
+      return
+    }
+
+    git.init().then(async () => {
+      if (git.updated) {
+        setStatus(await git.getProjectStatus())
+      }
+    })
+  }, [blogPosts])
+
+  const getStatusClass = (filename) => {
+    if (status?.addedFiles?.includes(filename) || status?.modifiedFiles?.includes(filename)) {
+      return 'marker:text-blue-500'
+    } else {
+      return 'marker:text-green-500'
+    }
+  }
 
   return (
     <>
@@ -53,7 +75,9 @@ export default function ({ posts, collection }) {
           <h3>Blog</h3>
           <ul>
             {blogPosts.map(post => (
-              <li key={post.slug}><Link href={`/blog/${post.slug}`}>{post.title}</Link> - <small>{dateFormat(post.date, 'longDate')}</small></li>
+              <li className={getStatusClass(post.filename.substring(1))} key={post.slug}>
+                <Link href={`/blog/${post.slug}`}>{post.title}</Link> - <small>{dateFormat(post.date, 'longDate')}</small>
+              </li>
             ))}
           </ul>
         </main>

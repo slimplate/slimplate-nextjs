@@ -1,7 +1,6 @@
-// TODO: eventually this should also indicate status, and maybe hide itself if there are no pending chnages
-
 import Git from '@slimplate/github'
 import { useLocalStorage } from '@slimplate/utils'
+import StatusIndicator from './StatusIndicator'
 
 export default function ButtonSync ({ collection, repo, proxy, branch = 'main', children = 'Sync' }) {
   const [user] = useLocalStorage('user', false)
@@ -14,12 +13,18 @@ export default function ButtonSync ({ collection, repo, proxy, branch = 'main', 
     const git = new Git({ collection, repo, proxy, branch })
     git.init().then(async () => {
       if (git.updated) {
-        console.log('syncing with remote')
         await git.pull()
         await git.push()
       }
     })
   }
 
-  return <button onClick={handleClick} className='btn btn-primary'>{children}</button>
+  return (
+    <>
+      <button onClick={handleClick} className='btn btn-primary'>
+        <StatusIndicator collection={collection} repo={repo} proxy={proxy} branch={branch} />
+        {children}
+      </button>
+    </>
+  )
 }

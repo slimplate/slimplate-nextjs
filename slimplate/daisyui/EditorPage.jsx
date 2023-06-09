@@ -1,11 +1,12 @@
 // Client-side editor drawer
-import { useRef, memo, useState } from 'react'
+import { useRef, memo } from 'react'
 import YAML from 'yaml'
 import { IconPencil, IconPlus } from '@tabler/icons-react'
-import { useLocalStorage, tt, dateFormat } from '@slimplate/utils'
+import { useLocalStorage, tt } from '@slimplate/utils'
 import Git from '@slimplate/github'
 import ButtonSync from './ButtonSync'
 import Form from './Form'
+import StatusIndicator from './StatusIndicator'
 
 export default memo(function EditorPage ({ onUpdate = () => {}, item, collection, repo, proxy, branch = 'main', children }) {
   const [user] = useLocalStorage('user', false)
@@ -38,7 +39,6 @@ export default memo(function EditorPage ({ onUpdate = () => {}, item, collection
         r.current.checked = false
 
         // force re-render from parent by giving it the value from form
-        console.log('triggering EditorPage.onUpdate', { ...values, filename })
         onUpdate({ ...values, filename })
       }
     })
