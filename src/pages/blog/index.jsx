@@ -43,6 +43,7 @@ export default function ({ posts, collection }) {
     if (!user) {
       return
     }
+    setStatus(false)
 
     git.init().then(async () => {
       if (git.updated) {
@@ -70,7 +71,7 @@ export default function ({ posts, collection }) {
         collection={collection}
         branch={branch || 'main'}
         proxy={process.env.NEXT_PUBLIC_CORS_PROXY}
-        onUpdate={post => setBlogPosts(sortPosts([...posts, post]))}
+        onUpdate={post => setBlogPosts(sortPosts([...blogPosts, post]))}
       >
         <main className='prose m-auto'>
           <h3>Blog</h3>
