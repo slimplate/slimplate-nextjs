@@ -8,7 +8,7 @@ import ButtonSync from './ButtonSync'
 import Form from './Form'
 import StatusIndicator from './StatusIndicator'
 
-export default memo(function EditorPage ({ status, onUpdate = () => {}, item, collection, repo, proxy, branch = 'main', children }) {
+export default memo(function EditorPage ({ status, showSync = false, onUpdate = () => {}, item, collection, repo, proxy, branch = 'main', children }) {
   const [user] = useLocalStorage('user', false)
   const r = useRef()
 
@@ -54,11 +54,13 @@ export default memo(function EditorPage ({ status, onUpdate = () => {}, item, co
             : <IconPlus>New</IconPlus>}
         </label>
         {children}
-        <div className='fixed top-16 right-2'>
-          <ButtonSync status={status} collection={collection} repo={repo} proxy={proxy} branch={branch}>
-            <StatusIndicator status={status} />
-            Sync
-          </ButtonSync>
+        <div className='fixed top-20 right-2'>
+          {showSync && (
+            <ButtonSync status={status} collection={collection} repo={repo} proxy={proxy} branch={branch}>
+              <StatusIndicator status={status} />
+              Sync
+            </ButtonSync>
+          )}
         </div>
       </div>
       <div className='drawer-side'>
