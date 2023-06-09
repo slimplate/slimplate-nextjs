@@ -40,21 +40,25 @@ export default function ({ post, collection, slug }) {
     if (!user) {
       return
     }
-    const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
-    git.init().then(async () => {
-      const posts = await git.getAllItems()
-      if (posts) {
-        const p = findPostBySlug(slug, posts)
-        if (p) {
-          updatePost(p)
-        }
-      }
-    })
-  }, [user])
 
-  return (
+    if (collection) {
+      const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
+      git.init().then(async () => {
+        const posts = await git.getAllItems()
+        if (posts) {
+          const p = findPostBySlug(slug, posts)
+          if (p) {
+            updatePost(p)
+          }
+        }
+      })
+    }
+  }, [user, collection])
+
+  return blogPost && (
     <>
       <Head>
+        Hello
         <title>{blogPost.title ? `Blog - ${blogPost.title}` : 'Blog'}</title>
       </Head>
       <EditorPage onUpdate={updatePost} item={blogPost} collection={collection} proxy={process.env.NEXT_PUBLIC_CORS_PROXY} repo={repo} branch={branch || 'main'}>
@@ -79,8 +83,11 @@ export async function getStaticPaths () {
 export async function getStaticProps ({ params: { slug } }) {
   const Content = (await import('@slimplate/filesystem')).default
   const content = new Content(collections.blog, 'blog')
-  const post = findPostBySlug(slug, await content.list(true))
+
+  const post = findPostBySlug(slug, await content.list(true)) || {}
+
   post.mdx = await serialize(post.children || '', { mdxOptions })
+
   // TODO: since this will fallthrough we should check somehow if they are logged in, and 404 on missing, if not
   const props = {
     slug,

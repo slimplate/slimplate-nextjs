@@ -42,7 +42,13 @@ export default function ({ posts, collection }) {
       <Head>
         <title>Blog</title>
       </Head>
-      <EditorPage onUpdate={post => setBlogPosts(sortPosts([...posts, post]))} collection={collection} proxy={process.env.NEXT_PUBLIC_CORS_PROXY} repo={repo} branch={branch || 'main'}>
+      <EditorPage
+        repo={repo}
+        collection={collection}
+        branch={branch || 'main'}
+        proxy={process.env.NEXT_PUBLIC_CORS_PROXY}
+        onUpdate={post => setBlogPosts(sortPosts([...posts, post]))}
+      >
         <main className='prose m-auto'>
           <h3>Blog</h3>
           <ul>
