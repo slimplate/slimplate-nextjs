@@ -7,7 +7,7 @@ import Git from '@slimplate/github'
 import ButtonSync from './ButtonSync'
 import Form from './Form'
 import { useRouter } from 'next/router'
-import StatusIndicator from './StatusIndicator'
+import { StatusIndicator } from './indicators'
 
 export default memo(function EditorPage ({ status, onUpdate = () => {}, item, collection, repo, proxy, branch = 'main', children }) {
   const [user] = useLocalStorage('user', false)
@@ -61,17 +61,21 @@ export default memo(function EditorPage ({ status, onUpdate = () => {}, item, co
     <div className='drawer'>
       <input ref={r} id='slimplate-drawer' type='checkbox' className='drawer-toggle' />
       <div className='drawer-content'>
+
+        {/* Toolbar */}
         <div className='flex flex-col gap-2 w-16 sticky top-2 left-2 '>
+          {/* Edit / New Button */}
           <label htmlFor='slimplate-drawer' className='btn drawer-button'>
             {item
               ? <IconPencil>Edit</IconPencil>
               : <IconPlus>New</IconPlus>}
           </label>
 
+          {/* Delete Button + Confirmation Modal */}
           {item && (
             <>
-              <button className='btn' onClick={() => window.my_modal_1.showModal()}><IconX>Close</IconX></button>
-              <dialog id='my_modal_1' className='modal'>
+              <button className='btn' onClick={() => window.delete_dialog.showModal()}><IconX>Close</IconX></button>
+              <dialog id='delete_dialog' className='modal'>
                 <form method='dialog' className='modal-box'>
                   <h3 className='font-bold text-lg'>Delete article
                   </h3>
@@ -79,25 +83,28 @@ export default memo(function EditorPage ({ status, onUpdate = () => {}, item, co
                     <span className='ml-1 text-accent'>{item.title}</span>?
                   </h3>
                   <div className='modal-action'>
+                    <button className='btn btn-outline' htmlFor='delete_dialog'>Cancel</button>
                     <button onClick={handleDelete} className='btn btn-outline btn-error'>Delete</button>
                   </div>
                 </form>
               </dialog>
             </>
           )}
-        </div>
 
-        {children}
-        <div className='fixed top-20 right-2'>
-          {status && (
-            <ButtonSync collection={collection} repo={repo} proxy={proxy} branch={branch}>
-              <StatusIndicator status={status} />
-              Sync
-            </ButtonSync>
-          )}
+          {/* Sync Button */}
+          <div className='fixed top-20 right-2'>
+            {status && (
+              <ButtonSync collection={collection} repo={repo} proxy={proxy} branch={branch}>
+                <StatusIndicator status={status} />
+                Sync
+              </ButtonSync>
+            )}
+          </div>
         </div>
+        {children}
       </div>
 
+      {/* Pullout drawer */}
       <div className='drawer-side'>
         <label htmlFor='slimplate-drawer' className='drawer-overlay' />
         <form className='p-4 menu h-full bg-base-200 text-base-content flex flex-col gap-4' onSubmit={handleSubmit}>

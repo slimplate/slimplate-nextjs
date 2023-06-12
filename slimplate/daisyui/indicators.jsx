@@ -1,7 +1,7 @@
 import cx from 'classnames'
 import { IconCheck, IconBoxAlignRight, IconBoxAlignLeft } from '@tabler/icons-react'
 
-export default function StatusIndicator ({ status, showText = false }) {
+export function StatusIndicator ({ status, showText = false }) {
   return (
     <div className={cx('flex items-center')}>
       <div>
