@@ -60,7 +60,7 @@ export default class Git {
     return u.toString()
   }
 
-  async getProjectStatus () {
+  async getCommitStatusWithDiff () {
     const remote = (await this.fetch()).fetchHead
     const log = await this.log()
     const local = log[0].oid

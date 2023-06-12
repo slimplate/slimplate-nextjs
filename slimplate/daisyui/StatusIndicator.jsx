@@ -5,7 +5,7 @@ export default function StatusIndicator ({ status, showText = false }) {
   return (
     <div className={cx('flex items-center')}>
       <div>
-        {!status && (
+        {status.commitsAhead === undefined && (
           <div className='flex items-center' title='Syncing with remote'>
             <span className='loading loading-spinner loading-xs' />
             {showText && 'Loading'}

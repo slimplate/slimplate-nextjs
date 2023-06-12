@@ -20,7 +20,7 @@ function sortPosts (posts) {
 export default function ({ posts, collection }) {
   const [blogPosts, setBlogPosts] = useState(posts)
   const [user] = useLocalStorage('user', false)
-  const [status, setStatus] = useState(false)
+  const [status, setStatus] = useState({})
   const git = new Git({ collection, repo, proxy: process.env.NEXT_PUBLIC_CORS_PROXY, branch: branch || 'main' })
 
   // this pulls the client-side list of posts
@@ -31,26 +31,20 @@ export default function ({ posts, collection }) {
     git.init().then(async () => {
       if (git.updated) {
         const posts = await git.getAllItems()
-        setStatus(await git.getProjectStatus())
         if (posts) {
+          setStatus(await git.getCommitStatusWithDiff())
           setBlogPosts(sortPosts(posts))
+
+          const interval = setInterval(async () => {
+            setStatus({})
+            setStatus(await git.getCommitStatusWithDiff())
+          }, 5000)
+
+          return () => clearInterval(interval)
         }
       }
     })
   }, [collection, user, posts])
-
-  useEffect(() => {
-    if (!user) {
-      return
-    }
-    setStatus(false)
-
-    git.init().then(async () => {
-      if (git.updated) {
-        setStatus(await git.getProjectStatus())
-      }
-    })
-  }, [blogPosts])
 
   const getStatusClass = (filename) => {
     if (status?.addedFiles?.includes(filename) || status?.modifiedFiles?.includes(filename)) {
@@ -66,9 +60,8 @@ export default function ({ posts, collection }) {
         <title>Blog</title>
       </Head>
       <EditorPage
-        showStatus
-        status={status}
         repo={repo}
+        status={status}
         collection={collection}
         branch={branch || 'main'}
         proxy={process.env.NEXT_PUBLIC_CORS_PROXY}
