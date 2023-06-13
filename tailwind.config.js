@@ -4,7 +4,8 @@ module.exports = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './slimplate/**/*.{js,ts,jsx,tsx,mdx}'
+    './slimplate/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@slimplate/daisyui/**/*.{mjs,cjs}'
   ],
   plugins: [
     require('@tailwindcss/typography'),
