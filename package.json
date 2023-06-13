@@ -1,5 +1,5 @@
 {
-  "name": "slimplate-nextjs2",
+  "name": "@slimplate/nextjs",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -32,6 +32,10 @@
     "tailwindcss": "latest",
     "template-templates": "latest",
     "yaml": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slimplate/slimplate-nextjs.git"
   },
   "devDependencies": {
     "@tailwindcss/typography": "latest",
