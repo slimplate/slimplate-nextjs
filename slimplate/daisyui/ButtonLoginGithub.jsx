@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocalStorage } from '@slimplate/utils'
 import { Octokit } from '@octokit/rest'
 
-export default function ButtonLogin ({ backendURL, redirectURL, scope = 'repo read:org read:user user:email' }) {
+export default function ButtonLoginGithub ({ backendURL, redirectURL, scope = 'repo read:org read:user user:email' }) {
   const [user, setUser] = useLocalStorage('user', false)
 
   useEffect(() => {
