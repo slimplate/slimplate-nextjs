@@ -6,6 +6,7 @@ import Git from '@slimplate/github'
 import s from '@/../.slimplate.json'
 import { EditorPage } from '@slimplate/daisyui'
 import { useLocalStorage } from '@slimplate/utils'
+import Content from '@slimplate/filesystem'
 const { collections, repo, branch } = s
 
 const sorter = new Intl.Collator()
@@ -83,7 +84,6 @@ export default function ({ posts, collection }) {
 }
 
 export async function getStaticProps () {
-  const Content = (await import('@slimplate/filesystem')).default
   const content = new Content(collections.blog, 'blog')
   const props = { posts: sortPosts(await content.list(true)), collection: collections.blog }
   return { props }

@@ -1,13 +1,12 @@
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-
 import '@/styles/globals.css'
 
 // forces this to update in client-side space
 // sort of the equivilant of a modern client-side PureComponent
 // https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading
 const ButtonLoginDynamic = dynamic(
-  async () => (await import('@slimplate/daisyui')).ButtonLoginGithub,
+  async () => (await import('@slimplate/daisyui')).default,
   { ssr: false }
 )
 
